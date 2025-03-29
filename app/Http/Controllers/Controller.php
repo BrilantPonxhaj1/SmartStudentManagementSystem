@@ -3,18 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Routing\Controller as BaseController;
 
 abstract class Controller extends BaseController
 {
-    public function getUser(): ?User
+    public function getUser(): Authenticatable
     {
-        $user = auth()->user();
-        if($user instanceof User) {
-            return $user;
-        }
-        $userId = auth()->id();
-        return User::query()->find($userId);
+
+        return auth()->user();
     }
 }
 
