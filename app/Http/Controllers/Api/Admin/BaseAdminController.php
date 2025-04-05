@@ -17,7 +17,7 @@ abstract class BaseAdminController extends Controller
     public function callAction($method, $parameters): Response
     {
         $user = $this->getUser();
-        if (!$user || $user->getType()!== 'superadmin') {
+        if ($user->getType()!== 'superadmin') {
             return ApiResponseFactory::error('Not Implemented', 501);
         }
         return parent::callAction($method, $parameters);
