@@ -16,7 +16,6 @@ class ApiResponseFactory
     public static function success($data, int $status = 200): JsonResponse
     {
         return response()->json([
-            'success' => true,
             'data' => $data,
         ], $status);
     }
@@ -31,7 +30,6 @@ class ApiResponseFactory
     public static function error(string $message, int $status = 400): JsonResponse
     {
         return response()->json([
-            'success' => false,
             'message' => $message,
         ], $status);
     }
