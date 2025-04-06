@@ -21,6 +21,7 @@ class AuthController
      *     path="/api/login",
      *     summary="User login",
      *     tags={"Auth"},
+     *     operationId="login",
      *     description="Verifies user credentials and returns user data upon successful login",
      *     @OA\RequestBody(
      *         required=true,

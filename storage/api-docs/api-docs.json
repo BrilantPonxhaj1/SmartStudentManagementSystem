@@ -7,12 +7,40 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000/api/docs",
+            "url": "http://localhost:8000",
             "description": "Local server"
         }
     ],
     "paths": {
         "/api": {},
+        "/students": {
+            "get": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Get a list of students",
+                "description": "Retrieves a list of all students.",
+                "operationId": "listStudents",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "students": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [
@@ -20,7 +48,7 @@
                 ],
                 "summary": "User login",
                 "description": "Verifies user credentials and returns user data upon successful login",
-                "operationId": "222b2625838e3c57e017987f73598fda",
+                "operationId": "login",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -104,9 +132,113 @@
                     }
                 }
             }
+        },
+        "/oauth/token": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Generate OAuth token",
+                "description": "Generates an access token using user credentials.",
+                "operationId": "issueToken",
+                "requestBody": {
+                    "description": "User credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "grant_type",
+                                    "client_id",
+                                    "client_secret",
+                                    "username",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "grant_type": {
+                                        "type": "string",
+                                        "example": "password"
+                                    },
+                                    "client_id": {
+                                        "type": "string",
+                                        "example": "3"
+                                    },
+                                    "client_secret": {
+                                        "type": "string",
+                                        "example": "your_client_secret"
+                                    },
+                                    "username": {
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "secret"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful token generation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOi..."
+                                        },
+                                        "refresh_token": {
+                                            "type": "string",
+                                            "example": "def50200..."
+                                        },
+                                        "expires_in": {
+                                            "type": "integer",
+                                            "example": 3600
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "Bearer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized. Invalid credentials.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "invalid_credentials"
+                                        },
+                                        "error_description": {
+                                            "type": "string",
+                                            "example": "The user credentials were incorrect."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [
+        {
+            "name": "Students",
+            "description": "Students"
+        },
         {
             "name": "Auth",
             "description": "Auth"

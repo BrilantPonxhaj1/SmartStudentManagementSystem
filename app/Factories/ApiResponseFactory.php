@@ -15,10 +15,9 @@ class ApiResponseFactory
      */
     public static function success($data, int $status = 200): JsonResponse
     {
-        return response()->json([
-            'data' => $data,
-        ], $status);
+        return response()->json($data, $status);
     }
+
 
     /**
      * Create an error response with a message.

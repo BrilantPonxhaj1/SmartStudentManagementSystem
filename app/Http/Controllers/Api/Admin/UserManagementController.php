@@ -11,6 +11,31 @@ class UserManagementController extends BaseAdminController
     {
         $this->adminProcessor = $adminProcessor;
     }
+    /**
+     * List all students.
+     *
+     * @OA\Get(
+     *     path="/students",
+     *     summary="Get a list of students",
+     *     description="Retrieves a list of all students.",
+     *     operationId="listStudents",
+     *     tags={"Students"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="students",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated"
+     *     )
+     * )
+     */
     public function listStudents()
     {
         $students = $this->adminProcessor->getStudents();
