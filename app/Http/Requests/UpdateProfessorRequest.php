@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Professor;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -20,18 +21,21 @@ class UpdateProfessorRequest extends FormRequest
 
     public function rules(): array
     {
-        $id = $this->route('id');
+        $professorId = $this->route('id');
+        $professor = Professor::find($professorId);
+        $userId = $professor?->user_id;
+
         return [
             'first_name' => ['required','string','max:255'],
             'last_name'  => ['required','string','max:255'],
             'email'      => [
                 'required',
                 'email',
-                Rule::unique('users','email')->ignore($id),
+                Rule::unique('users','email')->ignore($userId),
             ],
-            'phone'      => ['required','string','max:20'],
-            'password'   => ['nullable','string','min:8'],
-            'role'       => ['required','string','max:255'],
+            'password'       => ['nullable', 'string', 'min:6'],
+            'specialization' => ['required', 'string', 'max:255'],
+            'academic_role'  => ['required', 'string', 'max:255'],
         ];
     }
 }

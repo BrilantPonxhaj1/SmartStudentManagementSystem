@@ -19,12 +19,15 @@ class StoreProfessorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name'            => 'required|string|max:255',
-            'last_name'             => 'required|string|max:255',
-            'email'                 => 'required|email|unique:users,email',
-            'phone'                 => 'required|string|max:20',
-            'password'              => 'required|string|min:8',
-            'role'                  => 'required|string|max:255',
+            'first_name'       => ['required', 'string', 'max:255'],
+            'last_name'        => ['required', 'string', 'max:255'],
+            'email'            => ['required', 'email', 'unique:users,email'],
+            'password'         => ['required', 'string', 'min:8', 'confirmed'],
+            'university_id'    => ['required', 'integer', 'exists:universities,id'],
+            'department_id'    => ['required', 'integer', 'exists:departments,id'],
+            'employee_number'  => ['required', 'string', 'max:255'],
+            'specialization'   => ['required', 'string', 'max:255'],
+            'academic_role'    => ['required', 'string', 'max:255'],
         ];
     }
 }
