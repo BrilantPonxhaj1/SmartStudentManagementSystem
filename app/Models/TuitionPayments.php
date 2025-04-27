@@ -41,7 +41,7 @@ class TuitionPayments extends Model
 
     public function studentProfile()
     {
-        return $this->belongsTo(StudentProfile::class);
+        return $this->belongsTo(Student::class);
     }
 
     public function semester()
