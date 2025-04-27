@@ -37,7 +37,7 @@ class CourseForm extends Model
         * The student that submitted the course form.
      */
     public function studentProfile(): BelongsTo {
-        return $this->belongsTo(StudentProfile::class);
+        return $this->belongsTo(Student::class);
     }
 
     /**
