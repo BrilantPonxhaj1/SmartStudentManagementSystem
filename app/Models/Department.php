@@ -29,7 +29,7 @@ class Department extends Model
 
     public function head()
     {
-        return $this->belongsTo(ProfessorProfile::class, 'head_id');
+        return $this->belongsTo(Professor::class, 'head_id');
     }
 
     /**
@@ -37,7 +37,7 @@ class Department extends Model
      */
     public function professors()
     {
-        return $this->hasMany(ProfessorProfile::class);
+        return $this->hasMany(Professor::class);
     }
 
     /**
