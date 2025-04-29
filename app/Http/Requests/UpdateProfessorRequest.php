@@ -33,6 +33,8 @@ class UpdateProfessorRequest extends FormRequest
                 'email',
                 Rule::unique('users','email')->ignore($userId),
             ],
+            'university_id' => ['required', 'integer', 'exists:universities,id'],
+            'department_id' => ['required', 'integer', 'exists:departments,id'],
             'password'       => ['nullable', 'string', 'min:6'],
             'specialization' => ['required', 'string', 'max:255'],
             'academic_role'  => ['required', 'string', 'max:255'],

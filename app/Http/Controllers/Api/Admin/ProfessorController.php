@@ -30,12 +30,15 @@ class ProfessorController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $profs = $this->processor->list()->load('user');
+            $profs = $this->processor
+                ->listWithUser();
             return ApiResponseFactory::success([
                 'data' => ProfessorResource::collection($profs)
             ], Response::HTTP_OK);
         } catch (Throwable $e) {
-            return ApiResponseFactory::error('Failed to fetch professors', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json([
+                'error' => 'Failed to retrieve professors', $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -69,8 +72,9 @@ class ProfessorController extends Controller
                 'data'    => new ProfessorResource($prof)
             ], Response::HTTP_CREATED);
         } catch (Throwable $e) {
-            return ApiResponseFactory::error('Error creating professor', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+            return response()->json([
+                'error' => 'Error creating Professor!', $e
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);        }
     }
 
     /**
@@ -89,7 +93,7 @@ class ProfessorController extends Controller
         } catch (ModelNotFoundException $e) {
             return ApiResponseFactory::error('Professor not found', Response::HTTP_NOT_FOUND);
         } catch (Throwable $e) {
-            return ApiResponseFactory::error('Error updating professor', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ApiResponseFactory::error($e, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

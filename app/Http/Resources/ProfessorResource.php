@@ -12,7 +12,8 @@ class ProfessorResource extends JsonResource
         $user = $this->whenLoaded('user');
 
         return [
-            'id'             => $user->id,                        // from users table
+            'id'             => $this->id,
+            'uid'            => $user->id,                        // from users table
             'first_name'     => $user->first_name,
             'last_name'      => $user->last_name,
             'email'          => $user->email,

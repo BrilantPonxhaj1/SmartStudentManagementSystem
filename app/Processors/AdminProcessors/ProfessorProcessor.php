@@ -11,16 +11,23 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use App\Models\User;
 use Throwable;
+use Illuminate\Support\Facades\Auth;
+
 
 class ProfessorProcessor extends BaseProcessor
 {
     public function __construct(ProfessorRepository $repo, DatabaseManager $db)
     {
-        parent::__construct($repo, $db); // $repo is-a BaseRepository, so this is valid
+        parent::__construct($repo, $db);
     }
-    public function list()
+    /**
+     * List all professors with their user profiles.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function listWithUser()
     {
-        return $this->repo->all();
+        return $this->repo->allWithUser();
     }
 
     // Get a single student by ID
