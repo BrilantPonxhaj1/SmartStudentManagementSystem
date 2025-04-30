@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Professor extends Model
 {
     use HasFactory;
-
+    protected $table = 'professor_profiles';
     /**
      * Mass-assignable attributes.
      *
