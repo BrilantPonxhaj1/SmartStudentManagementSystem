@@ -36,12 +36,12 @@ class Appointment extends Model
 
     public function studentProfile()
     {
-        return $this->belongsTo(StudentProfile::class);
+        return $this->belongsTo(Student::class);
     }
 
     public function professorProfile()
     {
-        return $this->belongsTo(ProfessorProfile::class);
+        return $this->belongsTo(Professor::class);
     }
 
     public function requestedBy()
