@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\DepartmentController;
+use App\Http\Controllers\Api\Admin\UniversityController;
 use App\Http\Controllers\Api\Admin\UserManagementController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +28,9 @@ Route::group([
     Route::put('/students/{id}', [StudentController::class, 'update']);
 
     Route::get('/user', [AuthController::class, 'me']);
+
+    Route::get('/universities', [UniversityController::class, 'index']);
+    Route::get('/departments/{uni}', [DepartmentController::class, 'getDeptByUniversity']);
 
 });
 
