@@ -32,7 +32,7 @@ class Enrollment extends Model
     /** Enrollment belongs to a student profile */
     public function studentProfile(): BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(StudentProfile::class);
     }
 
     /** Enrollment belongs to a course offering */

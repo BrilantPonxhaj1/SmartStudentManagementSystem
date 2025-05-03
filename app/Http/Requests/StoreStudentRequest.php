@@ -21,9 +21,15 @@ class StoreStudentRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                'unique:students,email',
+                'unique:users,email',
             ],
-            'status'     => ['sometimes', 'in:active,inactive'],
+            'password'              => ['required','string','min:8'],
+            'university_id'         => ['required','exists:universities,id'],
+            'department_id'         => ['required','exists:departments,id'],
+            'student_number'        => ['required','string','unique:student_profiles,student_number'],
+            'program'               => ['required','string','max:255'],
+            'year_of_study'         => ['required','integer','min:1'],
+            'enrollment_year'       => ['required','integer','min:2000'],
         ];
     }
 }

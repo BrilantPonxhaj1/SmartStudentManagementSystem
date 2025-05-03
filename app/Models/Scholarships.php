@@ -43,6 +43,6 @@ class Scholarship extends Model
 
     public function studentProfile()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(StudentProfile::class);
     }
 }

@@ -15,7 +15,7 @@ class UpdateStudentRequest extends FormRequest
 
     public function rules(): array
     {
-        // Replace these fields with those in your Student model as appropriate.
+        // Replace these fields with those in your StudentProfile model as appropriate.
         return [
             'first_name' => ['sometimes', 'string', 'max:255'],
             'last_name'  => ['sometimes', 'string', 'max:255'],

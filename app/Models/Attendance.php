@@ -35,7 +35,7 @@ class Attendance extends Model
     /** Attendance belongs to a student profile */
     public function studentProfile(): BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(StudentProfile::class);
     }
 
     /** Attendance belongs to a course offering */
