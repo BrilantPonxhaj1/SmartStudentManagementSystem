@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Professor;
-use App\Models\StudentProfile;
+use App\Models\Student;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
@@ -20,7 +20,7 @@ class UpdateStudentRequest extends FormRequest
     public function rules(): array
     {
         $studentId = $this->route('id');
-        $student = StudentProfile::find($studentId);
+        $student = Student::find($studentId);
         $userId = $student?->user_id;
         return[
             'first_name'             => ['required','string','max:255'],

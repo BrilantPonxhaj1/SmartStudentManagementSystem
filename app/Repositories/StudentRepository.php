@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Professor;
-use App\Models\StudentProfile;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class StudentRepository extends BaseRepository
 {
-    public function __construct(StudentProfile $student)
+    public function __construct(Student $student)
     {
         parent::__construct($student);
     }
@@ -34,7 +34,7 @@ class StudentRepository extends BaseRepository
     }
 
 
-    public function create(array $data): StudentProfile
+    public function create(array $data): Student
     {
         $user = User::create([
             'first_name' => $data['first_name'],
@@ -64,7 +64,7 @@ class StudentRepository extends BaseRepository
         }
     }
 
-    public function update(int $id, array $data): StudentProfile
+    public function update(int $id, array $data): Student
     {
         return DB::transaction(function() use ($id, $data) {
             $profile = $this->model->with('user')->find($id);

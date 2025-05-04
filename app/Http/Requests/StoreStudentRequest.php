@@ -34,4 +34,11 @@ class StoreStudentRequest extends FormRequest
             'enrollment_year'       => ['required','integer','min:2000'],
         ];
     }
+    protected function failedValidation(Validator|\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'message' => 'Validation Failed',
+            'errors'  => $validator->errors()->toArray(),
+        ], 422));
+    }
 }

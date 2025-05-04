@@ -15,7 +15,7 @@ return new class extends Migration
     {
         DB::table('users')->insert([
             'first_name'       => 'Test ',
-            'last_name'       => ' StudentProfile',
+            'last_name'       => ' Student',
             'email'      => 'student@example.com',
             'password'   => Hash::make('secret'),
             'type'       => 'student',  // Ensure your users table has this column
