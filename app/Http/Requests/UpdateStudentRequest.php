@@ -29,8 +29,8 @@ class UpdateStudentRequest extends FormRequest
                 'required','email','max:255',
                 Rule::unique('users','email')->ignore($userId),
             ],
-            'password'               => ['required','string','min:8'],
-            'type'                   => ['required','in:student,professor,superadmin'],
+            'password'               => ['sometimes','string','min:8'],
+            'type'                   => ['sometimes','in:student,professor,superadmin'],
 
             'university_id'          => ['required','exists:universities,id'],
             'department_id'          => ['required','exists:departments,id'],
