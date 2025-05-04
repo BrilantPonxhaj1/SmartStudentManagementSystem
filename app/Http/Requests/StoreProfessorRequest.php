@@ -25,7 +25,7 @@ class StoreProfessorRequest extends FormRequest
             'password'         => ['required', 'string', 'min:6'],
             'university_id'    => ['required', 'integer', 'exists:universities,id'],
             'department_id'    => ['required', 'integer', 'exists:departments,id'],
-            'employee_number'  => ['required', 'string', 'max:255'],
+//            'employee_number'  => ['required', 'string', 'max:255'],
             'specialization'   => ['required', 'string', 'max:255'],
             'academic_role'    => ['required', 'string', 'max:255'],
         ];

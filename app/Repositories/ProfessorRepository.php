@@ -21,6 +21,7 @@ class ProfessorRepository extends BaseRepository
      */
 
     public function create(array $data): Professor {
+        $nextEmployeeNumber = (string) ($this->model->max('employee_number') + 1);
         //user table part
         $user = User::create([
             'first_name' => $data['first_name'],
@@ -28,7 +29,7 @@ class ProfessorRepository extends BaseRepository
             'email'      => $data['email'],
             'password'   => bcrypt($data['password']),
             'type'       => 'teacher',
-        ]);                                                                                   // :contentReference[oaicite:0]{index=0}
+        ]);
 
 
         //professor table part
@@ -36,7 +37,7 @@ class ProfessorRepository extends BaseRepository
             'user_id'         => $user->id,
             'university_id'   => $data['university_id'],
             'department_id'   => $data['department_id'],
-            'employee_number' => $data['employee_number'],
+            'employee_number' => $nextEmployeeNumber,
             'specialization'  => $data['specialization'],
             'academic_role'   => $data['academic_role'],
         ]);
