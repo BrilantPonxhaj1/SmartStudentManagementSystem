@@ -12,7 +12,6 @@ Route::group([
     'prefix' => 'admin',
     'middleware' => ['auth:api'] // to ensure type=superadmin
 ], function () {
-    Route::get('/students', [UserManagementController::class, 'listStudents']);
     //professors
     Route::get('/professors', [ProfessorController::class, 'index']);
     Route::get('/professors/{id}', [ProfessorController::class, 'show']);
@@ -20,9 +19,9 @@ Route::group([
     Route::put('/professors/{id}', [ProfessorController::class, 'update']);
     Route::delete('/professors/{id}', [ProfessorController::class, 'destroy']);
 
-
     //students
     Route::get('/students', [StudentController::class, 'index']);
+    Route::get('/students/{id}', [StudentController::class, 'show']);
     Route::post('/students', [StudentController::class, 'store']);
     Route::delete('/students/{id}', [StudentController::class, 'destroy']);
     Route::put('/students/{id}', [StudentController::class, 'update']);

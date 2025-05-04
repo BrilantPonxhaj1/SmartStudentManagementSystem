@@ -7,6 +7,7 @@ use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Http\Resources\StudentResource;
 use App\Factories\ApiResponseFactory;
+use Throwable;
 
 class StudentController extends BaseAdminController
 {
@@ -26,7 +27,7 @@ class StudentController extends BaseAdminController
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function store(StoreStudentRequest $request)
     {
@@ -45,7 +46,7 @@ class StudentController extends BaseAdminController
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update(UpdateStudentRequest $request, $id)
     {
@@ -58,16 +59,8 @@ class StudentController extends BaseAdminController
     public function destroy($id)
     {
         $this->processor->delete($id);
-
-        // Option 1: Silent RESTful (204 No Content)
-        // return response()->noContent();
-
-        // Option 2: Custom Success Response (useful if frontend expects a message)
         return ApiResponseFactory::success(
             ['message' => 'Successfully deleted'], 200
         );
-
-        // Option 3: Even more RESTful (no body)
-        // return ApiResponseFactory::success(null, 204);
     }
 }
