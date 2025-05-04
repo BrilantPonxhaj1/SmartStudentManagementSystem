@@ -23,6 +23,8 @@ class StudentProfile extends Model
         'program',
         'year_of_study',
         'enrollment_year',
+        'university_id',
+        'department_id',
     ];
 
     /**

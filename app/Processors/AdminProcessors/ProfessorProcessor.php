@@ -23,7 +23,7 @@ class ProfessorProcessor extends BaseProcessor
     /**
      * List all professors with their user profiles.
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function listWithUser()
     {
@@ -47,7 +47,7 @@ class ProfessorProcessor extends BaseProcessor
     // Update a student (with transaction)
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update(int $id, array $data)
     {
@@ -59,7 +59,7 @@ class ProfessorProcessor extends BaseProcessor
     // Delete a student (with transaction)
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function delete(int $id): void
     {

@@ -20,6 +20,8 @@ class User extends Authenticatable
         'phone',
         'password',
         'type',
+        'university_id',
+        'department_id',
     ];
 
     // Hide sensitive attributes when serializing.

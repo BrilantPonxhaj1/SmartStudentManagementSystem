@@ -3,6 +3,7 @@ namespace App\Processors;
 
 use App\Repositories\StudentRepository;
 use Illuminate\Database\DatabaseManager;
+use Throwable;
 
 class StudentProcessor extends BaseProcessor
 {
@@ -34,7 +35,7 @@ class StudentProcessor extends BaseProcessor
     // Update a student (with transaction)
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update(int $id, array $data)
     {
@@ -46,7 +47,7 @@ class StudentProcessor extends BaseProcessor
     // Delete a student (with transaction)
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function delete(int $id): void
     {

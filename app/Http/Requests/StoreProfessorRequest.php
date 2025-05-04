@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Validator;
 
 class StoreProfessorRequest extends FormRequest
 {
@@ -29,5 +31,12 @@ class StoreProfessorRequest extends FormRequest
             'specialization'   => ['required', 'string', 'max:255'],
             'academic_role'    => ['required', 'string', 'max:255'],
         ];
+    }
+    protected function failedValidation(Validator|\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'message' => 'Validation Failed',
+            'errors'  => $validator->errors()->toArray(),
+        ], 422));
     }
 }

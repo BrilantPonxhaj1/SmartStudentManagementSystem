@@ -62,7 +62,7 @@ class ProfessorRepository extends BaseRepository
      * Retrieve a professor by ID along with their respective data in users table
      *
      * @param int $id
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return Model|null
      */
     public function find(int $id): ?Model
     {
