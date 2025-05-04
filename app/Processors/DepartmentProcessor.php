@@ -21,5 +21,5 @@ class DepartmentProcessor extends BaseProcessor
     {
         return $this->repo->listByUniversityId($uni);
     }
-    //List for select krejt universitetet listByUniId osht veq departmentet baaz te id s universitetit
+
 }
