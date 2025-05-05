@@ -21,7 +21,7 @@ class SubjectRepository extends BaseRepository
      */
     public function create(array $data): Subject
     {
-        $subject =  $this->model->create([
+        return $this->model->create([
             'university_id' => $data['university_id'],
             'department_id' => $data['department_id'],
             'code'          => $data['code'],
@@ -30,7 +30,6 @@ class SubjectRepository extends BaseRepository
             'credits'       => $data['credits'],
             'type'          => $data['type'],
         ]);
-        return $subject;
     }
 
     /**
@@ -38,7 +37,7 @@ class SubjectRepository extends BaseRepository
      *
      * @return \Illuminate\Support\Collection
      */
-    public function allWithRelations(): \Illuminate\Support\Collection
+    public function allSubjects(): \Illuminate\Support\Collection
     {
         return $this->model
             ->with(['university', 'department', 'courseOfferings', 'literature', 'enrollments'])
@@ -67,7 +66,7 @@ class SubjectRepository extends BaseRepository
      */
     public function update(int $id, array $data): Subject
     {
-        $subject = $this->model->findOrFail($id);
+        $subject = $this->model->find($id);
 
         $subject->update([
             'university_id' => $data['university_id'],

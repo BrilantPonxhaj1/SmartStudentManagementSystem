@@ -27,7 +27,7 @@ class Subject extends Model
      * Apply the tenant scope so every query is automatically
      * filtered by the current user’s university (and department).
      */
-    protected static function booted()
+    protected static function booted(): void
     {
         static::addGlobalScope(new TenantScope);
     }
@@ -35,7 +35,7 @@ class Subject extends Model
     /**
      * The university that offers this subject.
      */
-    public function university()
+    public function university(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(University::class);
     }
@@ -43,7 +43,7 @@ class Subject extends Model
     /**
      * The department that owns this subject.
      */
-    public function department()
+    public function department(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Department::class);
     }
@@ -51,7 +51,7 @@ class Subject extends Model
     /**
      * All course‐offering instances of this subject (each semester/section).
      */
-    public function courseOfferings()
+    public function courseOfferings(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(CourseOffering::class);
     }
@@ -59,7 +59,7 @@ class Subject extends Model
     /**
      * All literature/resources linked to this subject.
      */
-    public function literature()
+    public function literature(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Literature::class);
     }
@@ -67,7 +67,7 @@ class Subject extends Model
     /**
      * All enrollments in this subject, via its offerings.
      */
-    public function enrollments()
+    public function enrollments(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
     {
         return $this->hasManyThrough(
             Enrollment::class,

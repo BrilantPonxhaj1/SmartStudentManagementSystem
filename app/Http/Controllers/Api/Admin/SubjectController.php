@@ -20,19 +20,19 @@ class SubjectController extends BaseAdminController
     {
         $this->processor = $processor;
     }
-
+    // GET -> admin/subjects
     public function index(): JsonResponse
     {
         try {
-            $subjects = $this->processor->listWithRelations();
+            $subjects = $this->processor->allSubjects();
             return ApiResponseFactory::success([
                 'data' => SubjectResource::collection($subjects)
             ], Response::HTTP_OK);
         } catch (Throwable $e) {
-            return ApiResponseFactory::error('Error fetching subjects.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]);
+            return ApiResponseFactory::error($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]);
         }
     }
-
+    // GET -> admin/subjects/{id}
     public function show(int $id): JsonResponse
     {
         try {
@@ -46,7 +46,7 @@ class SubjectController extends BaseAdminController
             return ApiResponseFactory::error('Failed to retrieve subject', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
+    // POST -> admin/subjects
     public function store(StoreSubjectRequest $request): JsonResponse
     {
         try {
@@ -57,13 +57,13 @@ class SubjectController extends BaseAdminController
                 'data'    => new SubjectResource($subject)
             ], Response::HTTP_CREATED);
         } catch (Throwable $e) {
-            return ApiResponseFactory::error('Error creating subject', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ApiResponseFactory::error($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
+    // PUT -> admin/subjects/{id}
     public function update(UpdateSubjectRequest $request, int $id): JsonResponse
     {
-        try {
+        try{
             $data = $request->validated();
             $subject = $this->processor->update($id, $data);
             return ApiResponseFactory::success([
@@ -71,12 +71,12 @@ class SubjectController extends BaseAdminController
                 'data'    => new SubjectResource($subject)
             ], Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
-            return ApiResponseFactory::error('Subject not found', Response::HTTP_NOT_FOUND);
+            return ApiResponseFactory::error($e->getMessage(), Response::HTTP_NOT_FOUND);
         } catch (Throwable $e) {
-            return ApiResponseFactory::error('Error updating subject', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ApiResponseFactory::error($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
+    // DELETE -> admin/subjects/{id}
     public function destroy(int $id): JsonResponse
     {
         try {

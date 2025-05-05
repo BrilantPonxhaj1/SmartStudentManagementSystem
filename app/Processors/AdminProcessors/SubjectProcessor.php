@@ -5,6 +5,7 @@ namespace App\Processors\AdminProcessors;
 use App\Repositories\SubjectRepository;
 use Illuminate\Database\DatabaseManager;
 use App\Processors\BaseProcessor;
+use Illuminate\Database\Eloquent\Model;
 
 class SubjectProcessor extends BaseProcessor
 {
@@ -13,17 +14,17 @@ class SubjectProcessor extends BaseProcessor
         parent::__construct($repo, $db);
     }
 
-    public function listWithRelations()
+    public function allSubjects() : \Illuminate\Support\Collection
     {
-        return $this->repo->allWithRelations();
+        return $this->repo->allSubjects();
     }
 
-    public function get(int $id)
+    public function get(int $id) : ?Model
     {
         return $this->repo->find($id);
     }
 
-    public function create(array $data)
+    public function create(array $data) : Model
     {
         return $this->db->transaction(function () use ($data) {
             return $this->repo->create($data);
@@ -32,7 +33,7 @@ class SubjectProcessor extends BaseProcessor
     /**
      * @throws \Throwable
      */
-    public function update(int $id, array $data)
+    public function update(int $id, array $data) : Model
     {
         return $this->db->transaction(function () use ($id, $data) {
             return $this->repo->update($id, $data);

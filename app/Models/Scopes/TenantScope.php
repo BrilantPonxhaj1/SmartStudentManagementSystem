@@ -10,14 +10,19 @@ class TenantScope implements Scope
 {
     public function apply(Builder $builder, Model $model): void
     {
-        if (auth()->check()) {
-            // Always include university filter
-            $builder->where($model->getTable().'.university_id', auth()->user()->university_id);
+        if (!auth()->check()) {
+            return;
+        }
 
-            // Optionally include department filter if the user is restricted to one department
-            if (!is_null(auth()->user()->department_id)) {
-                $builder->where($model->getTable().'.department_id', auth()->user()->department_id);
-            }
+        $user = auth()->user();
+
+        if ($user->type === 'superadmin') {
+            return;
+        }
+        $builder->where($model->getTable().'.university_id', $user->university_id);
+
+        if (!is_null($user->department_id)) {
+            $builder->where($model->getTable().'.department_id', $user->department_id);
         }
     }
 }

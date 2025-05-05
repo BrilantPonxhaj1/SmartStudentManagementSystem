@@ -19,15 +19,15 @@ class SubjectResource extends JsonResource
             'credits'     => $this->credits,
             'type'        => $this->type,
 
-            'university' => [
-                'id'   => $university?->id,
-                'name' => $university?->name,
-            ],
-
-            'department' => [
-                'id'   => $department?->id,
-                'name' => $department?->name,
-            ],
+//            'university' => [
+//                'university_id'   => $university?->id,
+//                'name' => $university?->name,
+//            ],
+//
+//            'department' => [
+//                'id'   => $department?->id,
+//                'name' => $department?->name,
+//            ],
         ];
     }
 }
