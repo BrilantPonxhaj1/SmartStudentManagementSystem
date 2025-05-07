@@ -4,7 +4,9 @@ namespace App\Http\Requests;
 
 use App\Models\Professor;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 
 class UpdateProfessorRequest extends FormRequest

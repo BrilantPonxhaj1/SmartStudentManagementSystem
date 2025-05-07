@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     use HasFactory;
+    protected $table = 'student_profiles';
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +23,8 @@ class Student extends Model
         'program',
         'year_of_study',
         'enrollment_year',
+        'university_id',
+        'department_id',
     ];
 
     /**

@@ -71,4 +71,7 @@ class AuthController
 
         return ApiResponseFactory::success($user);
     }
+    public function me(Request $request) : JsonResponse {
+        return response()->json($request->user());
+    }
 }
