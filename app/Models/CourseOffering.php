@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Scopes\TenantScope;
 
 class CourseOffering extends Model
 {

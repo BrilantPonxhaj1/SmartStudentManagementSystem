@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\Admin\DepartmentController;
 use App\Http\Controllers\Api\Admin\UniversityController;
-use App\Http\Controllers\Api\Admin\UserManagementController;
+use App\Http\Controllers\Api\Admin\SubjectController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\StudentController;
@@ -30,6 +30,14 @@ Route::group([
 
     Route::get('/universities', [UniversityController::class, 'index']);
     Route::get('/departments/{uni}', [DepartmentController::class, 'getDeptByUniversity']);
+
+
+    //courses
+    Route::get('/subjects', [SubjectController::class, 'index']);
+    Route::get('/subjects/{id}', [SubjectController::class, 'show']);
+    Route::post('/subjects', [SubjectController::class, 'store']);
+    Route::put('/subjects/{id}', [SubjectController::class, 'update']);
+    Route::delete('/subjects/{id}', [SubjectController::class, 'destroy']);
 
 });
 
