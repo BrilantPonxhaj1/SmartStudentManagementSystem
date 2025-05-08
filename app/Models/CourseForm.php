@@ -44,7 +44,7 @@ class CourseForm extends Model
         * The semester that the course belongs to.
      */
     public function semester(): BelongsTo {
-        return $this->belongsTo(Semester::class);
+        return $this->belongsTo(Semesters::class);
     }
     /**
         * The user that approved the course form.

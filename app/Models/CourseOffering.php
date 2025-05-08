@@ -82,7 +82,7 @@ class CourseOffering extends Model
      */
     public function semester()
     {
-        return $this->belongsTo(Semester::class);
+        return $this->belongsTo(Semesters::class);
     }
 
     /**

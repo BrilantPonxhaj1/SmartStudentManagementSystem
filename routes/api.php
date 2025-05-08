@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Admin\DepartmentController;
 use App\Http\Controllers\Api\Admin\UniversityController;
 use App\Http\Controllers\Api\Admin\UserManagementController;
+use App\Http\Controllers\Api\Admin\SemesterController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\StudentController;
@@ -30,6 +31,13 @@ Route::group([
 
     Route::get('/universities', [UniversityController::class, 'index']);
     Route::get('/departments/{uni}', [DepartmentController::class, 'getDeptByUniversity']);
+
+    Route::get('/semester', [SemesterController::class, 'index']);
+    Route::get('/semester/{id}', [SemesterController::class, 'show']);
+    Route::post('/semester', [SemesterController::class, 'store']);
+    Route::put('/semester/{id}', [SemesterController::class, 'update']);
+    Route::delete('/semester/{id}', [SemesterController::class, 'destroy']);
+
 
 });
 

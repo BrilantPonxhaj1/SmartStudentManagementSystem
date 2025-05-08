@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Scopes\TenantScope;
 
-class Semester extends Model
+class Semesters extends Model
 {
     use HasFactory;
 
@@ -69,6 +69,6 @@ class Semester extends Model
      */
     public function tuitionPayments()
     {
-        return $this->hasMany(TuitionPayment::class);
+        return $this->hasMany(TuitionPayments::class);
     }
 }
