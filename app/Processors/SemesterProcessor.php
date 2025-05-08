@@ -5,6 +5,7 @@ namespace App\Processors;
 use App\Repositories\SemesterRepository;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
+use DomainException;
 
 class SemesterProcessor extends BaseProcessor
 {
@@ -20,6 +21,12 @@ class SemesterProcessor extends BaseProcessor
      */
     public function create(array $data)
     {
+        // --> 1
+        if ($this->repo->checkSemesterDateOverlapping($data)) {
+            throw new DomainException('Semester dates overlap with existing semesters.');
+        }
+
+        //--> 2
         return $this->db->transaction(fn() => $this->repo->create($data));
     }
 

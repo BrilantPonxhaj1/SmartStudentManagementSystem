@@ -34,6 +34,7 @@ Route::group([
 
     Route::get('/semester', [SemesterController::class, 'index']);
     Route::get('/semester/{id}', [SemesterController::class, 'show']);
+    //p.s qeta dy geta me shume siguri duhet me i hjek prej api/admin se tani profesorit i duhet me i perdor qeta endpointa.
     Route::post('/semester', [SemesterController::class, 'store']);
     Route::put('/semester/{id}', [SemesterController::class, 'update']);
     Route::delete('/semester/{id}', [SemesterController::class, 'destroy']);
