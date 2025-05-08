@@ -4,6 +4,7 @@ namespace App\Processors;
 
 use App\Repositories\SemesterRepository;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 use DomainException;
 
@@ -15,6 +16,7 @@ class SemesterProcessor extends BaseProcessor
     }
 
     /**
+     * Create a new semester.
      *
      * @param array $data
      * @throws Throwable
@@ -31,14 +33,29 @@ class SemesterProcessor extends BaseProcessor
     }
 
     /**
+     * Update a semester by ID.
+     *
      * @param array $data
      * @param int $id
      * @throws Throwable
      */
     public function update(int $id, array $data)
     {
+        if ($this->repo->checkOverlapOnUpdate($id, $data)) {
+            throw ValidationException::withMessages([
+                'start_date' => 'The given dates overlap an existing semester.'
+            ]);
+        }
+
         return $this->db->transaction(fn() => $this->repo->update($id, $data));
     }
+
+    /**
+     * Delete a semester by ID.
+     *
+     * @param int $id
+     * @return mixed
+     */
     public function delete(int $id): void
     {
         $this->db->transaction(fn() => $this->repo->delete($id));
