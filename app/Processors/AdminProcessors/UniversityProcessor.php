@@ -16,9 +16,9 @@ class UniversityProcessor extends BaseProcessor
     }
 
     /**
-     * Return all universities
+     * Return name+id for all universities
      */
-    public function listForSelect(): Collection
+    public function listForSelect()
     {
         return $this->repo->listForSelect();
     }

@@ -16,8 +16,7 @@ use Throwable;
 
 class UniversityController extends Controller
 {
-    protected UniversityProcessor $processor;
-    public function __construct(UniversityProcessor $processor)
+    public function __construct(protected UniversityProcessor $processor)
     {
         $this->processor = $processor;
     }

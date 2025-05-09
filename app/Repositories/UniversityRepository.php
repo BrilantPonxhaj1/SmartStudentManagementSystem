@@ -13,14 +13,13 @@ class UniversityRepository extends BaseRepository
         parent::__construct($model);
     }
 
-
     public function listForSelect(): Collection
     {
-        return $this->model
-            ->with(['departments', 'subjects'])
+        return $this->newQuery()
+            ->select('id', 'name')
+            ->orderBy('name')
             ->get();
     }
-
 
     /**
      * Create a new university
