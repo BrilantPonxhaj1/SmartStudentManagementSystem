@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\University;
-use App\Processors\UniversityProcessor;
-use Illuminate\Http\JsonResponse;
+use App\Processors\AdminProcessors\UniversityProcessor;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class UniversityController extends Controller

@@ -15,7 +15,7 @@ use App\Http\Requests\StoreProfessorRequest;
 USE Throwable;
 
 
-class ProfessorController extends Controller
+class ProfessorController extends BaseAdminController
 {
     protected ProfessorProcessor $processor;
 

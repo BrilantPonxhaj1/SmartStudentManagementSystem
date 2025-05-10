@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Processors;
+namespace App\Processors\AdminProcessors;
 
+use App\Processors\BaseProcessor;
 use App\Repositories\UniversityRepository;
-use Faker\Provider\Base;
 use Illuminate\Database\DatabaseManager;
 
 class UniversityProcessor extends BaseProcessor

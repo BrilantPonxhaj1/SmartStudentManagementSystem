@@ -6,9 +6,12 @@ use App\Http\Controllers\Api\Admin\SubjectController;
 use App\Http\Controllers\Api\Admin\UserManagementController;
 use App\Http\Controllers\Api\Admin\SemesterController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Student\CourseOfferingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\StudentController;
 use App\Http\Controllers\Api\Admin\ProfessorController;
+
+Route::post('/login', [AuthController::class, 'login']);
 
 Route::group([
     'prefix' => 'admin',
@@ -41,17 +44,24 @@ Route::group([
     Route::put('/subjects/{id}', [SubjectController::class, 'update']);
     Route::delete('/subjects/{id}', [SubjectController::class, 'destroy']);
 
-    Route::get('/semester', [SemesterController::class, 'index']);
-    Route::get('/semester/{id}', [SemesterController::class, 'show']);
-    //p.s qeta dy geta me shume siguri duhet me i hjek prej api/admin se tani profesorit i duhet me i perdor qeta endpointa.
     Route::post('/semester', [SemesterController::class, 'store']);
     Route::put('/semester/{id}', [SemesterController::class, 'update']);
     Route::delete('/semester/{id}', [SemesterController::class, 'destroy']);
 
 
 });
+//I lojm jasht se i perdorin edhe studentat edhe profat
+Route::middleware(['auth:api'])->group(function () {
+    Route::get('/semesters', [\App\Http\Controllers\Api\SemesterController::class, 'index']);
+    Route::get('/semesters/{id}', [\App\Http\Controllers\Api\SemesterController::class, 'show']);
+});
+Route::prefix('student')
+    ->middleware(['auth:api'])
+    ->group(function () {
 
-Route::post('/login', [AuthController::class, 'login'])->middleware('auth:api');
+// List available course offerings
+        Route::get('course_offerings', [CourseOfferingController::class, 'index']);
+    });
 
 
 ?>

@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Department;
-use App\Processors\DepartmentProcessor;
+use App\Processors\AdminProcessors\DepartmentProcessor;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
-class DepartmentController extends Controller
+class DepartmentController extends BaseAdminController
 {
     public function __construct(protected DepartmentProcessor $processor)
     {

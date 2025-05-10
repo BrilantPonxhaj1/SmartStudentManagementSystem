@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\TenantScoped;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Scopes\TenantScope;
 
-class Semesters extends Model
+class Semester extends Model
 {
     use HasFactory;
-
+    protected $table = 'semesters';
     /**
      * The attributes that are mass assignable.
      */
@@ -31,14 +32,6 @@ class Semesters extends Model
         'registration_deadline' => 'date',
     ];
 
-    /**
-     * Apply the tenant scope so every query is automatically
-     * filtered by the current user’s university.
-     */
-    protected static function booted()
-    {
-        static::addGlobalScope(new TenantScope);
-    }
 
     /**
      * The university that this semester belongs to.

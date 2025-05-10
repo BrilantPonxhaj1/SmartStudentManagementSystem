@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\TenantScoped;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Scopes\TenantScope;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Subject extends Model
 {
-    use HasFactory;
+    use HasFactory,TenantScoped;
 
     /**
      * The attributes that are mass assignable.
@@ -26,14 +27,6 @@ class Subject extends Model
         'type',
     ];
 
-    /**
-     * Apply the tenant scope so every query is automatically
-     * filtered by the current user’s university (and department).
-     */
-    protected static function booted(): void
-    {
-        static::addGlobalScope(new TenantScope);
-    }
 
     /**
      * The university that offers this subject.
