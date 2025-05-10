@@ -52,6 +52,7 @@ class SubjectController extends BaseAdminController
         try {
             $data = $request->validated();
             $subject = $this->processor->create($data);
+            $subject->load('university', 'department');
             return ApiResponseFactory::success([
                 'message' => 'Subject created successfully',
                 'data'    => new SubjectResource($subject)
@@ -66,6 +67,7 @@ class SubjectController extends BaseAdminController
         try{
             $data = $request->validated();
             $subject = $this->processor->update($id, $data);
+            $subject->load('university', 'department');
             return ApiResponseFactory::success([
                 'message' => 'Subject updated successfully',
                 'data'    => new SubjectResource($subject)
