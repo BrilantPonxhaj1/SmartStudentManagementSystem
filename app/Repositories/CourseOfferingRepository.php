@@ -39,4 +39,21 @@ class CourseOfferingRepository extends BaseRepository
         return $q->with(['subject','semester','enrollments','professors'])
             ->get();
     }
+
+    /**
+     * Check if the professor already has an offering with the same schedule in this semester.
+     */
+    public function professorHasScheduleConflict(array $data, ?int $excludeId = null): bool
+    {
+        $q = $this->model->newQuery()
+            ->where('professor_profile_id', $data['professor_profile_id'])
+            ->where('semester_id', $data['semester_id'])
+            ->where('schedule', $data['schedule']);
+
+        if ($excludeId) {
+            $q->where('id', '!=', $excludeId);
+        }
+
+        return $q->exists();
+    }
 }

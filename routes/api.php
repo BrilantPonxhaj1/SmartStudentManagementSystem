@@ -50,7 +50,6 @@ Route::group([
 
 
 });
-//I lojm jasht se i perdorin edhe studentat edhe profat
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/semesters', [\App\Http\Controllers\Api\SemesterController::class, 'index']);
     Route::get('/semesters/{id}', [\App\Http\Controllers\Api\SemesterController::class, 'show']);
