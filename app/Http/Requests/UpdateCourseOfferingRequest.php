@@ -12,7 +12,7 @@ class UpdateCourseOfferingRequest extends  FormRequest
             'university_id' => 'sometimes|required|exists:universities,id',
             'department_id' => 'sometimes|required|exists:departments,id',
             'subject_id' => 'sometimes|required|exists:subjects,id',
-            'professor_profile_id' => 'sometimes|required|exists:professors,id',
+            'professor_profile_id' => 'sometimes|required|exists:professor_profiles,id',
             'semester_id' => 'sometimes|required|exists:semesters,id',
             'section' => 'nullable|string|max:5',
             'schedule' => 'nullable|string|max:255',

@@ -48,6 +48,12 @@ Route::group([
     Route::put('/semester/{id}', [SemesterController::class, 'update']);
     Route::delete('/semester/{id}', [SemesterController::class, 'destroy']);
 
+    Route::get('/course-offerings', [CourseOfferingController::class, 'getAll']);
+    Route::get('/course-offerings/{id}', [CourseOfferingController::class, 'show']);
+    Route::post('/course-offerings', [CourseOfferingController::class, 'store']);
+    Route::put('/course-offerings/{id}', [CourseOfferingController::class, 'update']);
+    Route::delete('/course-offerings/{id}', [CourseOfferingController::class, 'destroy']);
+
 
 });
 Route::middleware(['auth:api'])->group(function () {

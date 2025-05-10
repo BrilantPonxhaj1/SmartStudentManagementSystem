@@ -13,10 +13,10 @@ class CourseOfferingRepository extends BaseRepository
         parent::__construct($courseOffering);
     }
 
-    public function create(array $data): CourseOffering
-    {
-        return $this->model->create($data);
-    }
+//    public function create(array $data): CourseOffering
+//    {
+//        return $this->model->create($data);
+//    }
     public function findBySemester(int $semesterId)
     {
         $user    = auth()->user();
@@ -40,6 +40,25 @@ class CourseOfferingRepository extends BaseRepository
             ->get();
     }
 
+     /**
+     * Check if a section is already used for this subject+semester.
+     */
+    public function sectionExists(array $data, ?int $excludeId = null): bool
+    {
+        $q = $this->model->newQuery()
+            ->where('subject_id', $data['subject_id'])
+            ->where('semester_id', $data['semester_id'])
+            ->where('section', $data['section']);
+
+        if ($excludeId) {
+            $q->where('id', '!=', $excludeId);
+        }
+
+        return $q->exists();
+    }
+
+
+
     /**
      * Check if the professor already has an offering with the same schedule in this semester.
      */
@@ -55,5 +74,13 @@ class CourseOfferingRepository extends BaseRepository
         }
 
         return $q->exists();
+    }
+    public function enrolledCount(int $offeringId): int {
+        return $this->model
+            ->newQuery()
+            ->where('id', $offeringId)
+            ->withCount('enrollments')
+            ->first()
+            ->enrollments_count;
     }
 }
