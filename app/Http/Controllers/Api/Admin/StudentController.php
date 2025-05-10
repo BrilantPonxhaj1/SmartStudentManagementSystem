@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
-use App\Processors\StudentProcessor;
+use App\Factories\ApiResponseFactory;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Http\Resources\StudentResource;
-use App\Factories\ApiResponseFactory;
+use App\Processors\AdminProcessors\StudentProcessor;
 use Throwable;
 
 class StudentController extends BaseAdminController

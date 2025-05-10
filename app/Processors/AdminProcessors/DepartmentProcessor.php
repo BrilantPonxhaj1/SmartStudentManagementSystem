@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Processors;
+namespace App\Processors\AdminProcessors;
 
+use App\Processors\BaseProcessor;
 use App\Repositories\DepartmentRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;

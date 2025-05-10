@@ -30,6 +30,14 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function studentProfile()
+    {
+        return $this->hasOne(Student::class);
+    }
+    public function professorProfile()
+    {
+        return $this->hasOne(Professor::class);
+    }
     public function getFirstName(): ?string
     {
         return $this->attributes['first_name'] ?? null;

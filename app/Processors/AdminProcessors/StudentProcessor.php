@@ -1,6 +1,7 @@
 <?php
-namespace App\Processors;
+namespace App\Processors\AdminProcessors;
 
+use App\Processors\BaseProcessor;
 use App\Repositories\StudentRepository;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
