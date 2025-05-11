@@ -46,6 +46,7 @@ Route::group([
     Route::put('/subjects/{id}', [SubjectController::class, 'update']);
     Route::delete('/subjects/{id}', [SubjectController::class, 'destroy']);
 
+    Route::get('/semesters/university/{id}', [SemesterController::class, 'getByUniversity']);
     Route::post('/semester', [SemesterController::class, 'store']);
     Route::put('/semester/{id}', [SemesterController::class, 'update']);
     Route::delete('/semester/{id}', [SemesterController::class, 'destroy']);
