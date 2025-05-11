@@ -90,4 +90,23 @@ class SubjectController extends BaseAdminController
             return ApiResponseFactory::error('Error deleting subject', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function byDepartment(int $deptId): JsonResponse
+    {
+        try{
+            $subjects = $this->processor->getSubjectsByDeptId($deptId);
+
+            return ApiResponseFactory::success([
+                'data' => SubjectResource::collection($subjects)
+            ], Response::HTTP_OK);
+
+        }catch (Throwable $e) {
+            return ApiResponseFactory::error(
+                'Failed to fetch subjects by department',
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                ['error' => $e->getMessage()]
+            );
+        }
+
+    }
 }

@@ -20,6 +20,7 @@ Route::group([
     //professors
     Route::get('/professors', [ProfessorController::class, 'index']);
     Route::get('/professors/{id}', [ProfessorController::class, 'show']);
+    Route::get('/professors/department/{id}', [ProfessorController::class, 'getProfessorsByDepartment']);
     Route::post('/professors', [ProfessorController::class, 'store']);
     Route::put('/professors/{id}', [ProfessorController::class, 'update']);
     Route::delete('/professors/{id}', [ProfessorController::class, 'destroy']);
@@ -40,6 +41,7 @@ Route::group([
     //courses
     Route::get('/subjects', [SubjectController::class, 'index']);
     Route::get('/subjects/{id}', [SubjectController::class, 'show']);
+    Route::get('/subjects/department/{id}', [SubjectController::class, 'byDepartment']);
     Route::post('/subjects', [SubjectController::class, 'store']);
     Route::put('/subjects/{id}', [SubjectController::class, 'update']);
     Route::delete('/subjects/{id}', [SubjectController::class, 'destroy']);
