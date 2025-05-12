@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Professor;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class ProfessorRepository extends BaseRepository
 {
@@ -117,4 +118,14 @@ class ProfessorRepository extends BaseRepository
 
     }
 
+    /**
+     * Fetch all professors (with user) for a given department.
+     */
+    public function getByDepartment(int $departmentId): Collection
+    {
+        return $this->model
+            ->with('user')
+            ->where('department_id', $departmentId)
+            ->get();
+    }
 }

@@ -67,4 +67,12 @@ class ProfessorProcessor extends BaseProcessor
             $this->repo->delete($id);
         });
     }
+
+    /**
+     * Return all professors belonging to $departmentId.
+     */
+    public function professorsByDepartment(int $departmentId): Collection
+    {
+        return $this->repo->getByDepartment($departmentId);
+    }
 }

@@ -20,6 +20,7 @@ Route::group([
     //professors
     Route::get('/professors', [ProfessorController::class, 'index']);
     Route::get('/professors/{id}', [ProfessorController::class, 'show']);
+    Route::get('/professors/department/{id}', [ProfessorController::class, 'getProfessorsByDepartment']);
     Route::post('/professors', [ProfessorController::class, 'store']);
     Route::put('/professors/{id}', [ProfessorController::class, 'update']);
     Route::delete('/professors/{id}', [ProfessorController::class, 'destroy']);
@@ -40,17 +41,24 @@ Route::group([
     //courses
     Route::get('/subjects', [SubjectController::class, 'index']);
     Route::get('/subjects/{id}', [SubjectController::class, 'show']);
+    Route::get('/subjects/department/{id}', [SubjectController::class, 'byDepartment']);
     Route::post('/subjects', [SubjectController::class, 'store']);
     Route::put('/subjects/{id}', [SubjectController::class, 'update']);
     Route::delete('/subjects/{id}', [SubjectController::class, 'destroy']);
 
+    Route::get('/semesters/university/{id}', [SemesterController::class, 'getByUniversity']);
     Route::post('/semester', [SemesterController::class, 'store']);
     Route::put('/semester/{id}', [SemesterController::class, 'update']);
     Route::delete('/semester/{id}', [SemesterController::class, 'destroy']);
 
+    Route::get('/course-offerings', [CourseOfferingController::class, 'getAll']);
+    Route::get('/course-offerings/{id}', [CourseOfferingController::class, 'show']);
+    Route::post('/course-offerings', [CourseOfferingController::class, 'store']);
+    Route::put('/course-offerings/{id}', [CourseOfferingController::class, 'update']);
+    Route::delete('/course-offerings/{id}', [CourseOfferingController::class, 'destroy']);
+
 
 });
-//I lojm jasht se i perdorin edhe studentat edhe profat
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/semesters', [\App\Http\Controllers\Api\SemesterController::class, 'index']);
     Route::get('/semesters/{id}', [\App\Http\Controllers\Api\SemesterController::class, 'show']);

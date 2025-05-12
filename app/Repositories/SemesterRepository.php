@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Semester;
+use Illuminate\Support\Collection;
 
 class SemesterRepository extends BaseRepository
 {
@@ -43,5 +44,17 @@ class SemesterRepository extends BaseRepository
                 $query->whereBetween('start_date', [$data['start_date'], $data['end_date']])
                     ->orWhereBetween('end_date',   [$data['start_date'], $data['end_date']]);
             })->exists();
+    }
+
+    /**
+     *
+     * Get all semesters by university id
+     */
+
+    public function getByUniversity(int $universityId): Collection
+    {
+        return $this->model
+            ->where('university_id', $universityId)
+            ->get();
     }
 }

@@ -10,9 +10,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Exception;
+use Throwable;
 
 class SemesterController extends BaseAdminController
 {
+    public function __construct(protected SemesterProcessor $processor)
+    {
+    }
 
     public function store(StoreSemesterRequest $request): JsonResponse
     {
@@ -58,6 +62,24 @@ class SemesterController extends BaseAdminController
                 'message'=>'Semester not found',
                 "error" => $exception->getMessage()]
                 , Response::HTTP_NOT_FOUND);
+        }
+    }
+    /**
+     * GET → admin/semesters/university/{universityId}
+     */
+    public function getByUniversity(int $universityId): JsonResponse
+    {
+        try {
+            $semesters = $this->processor->semestersByUniversity($universityId);
+
+            return response()->json([
+                'data' => SemesterResource::collection($semesters)
+            ], Response::HTTP_OK);
+        } catch (Throwable $e) {
+            return response()->json([
+                'message' => 'Failed to fetch semesters by university',
+                'error'   => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
