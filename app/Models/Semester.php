@@ -63,6 +63,6 @@ class Semester extends Model
      */
     public function tuitionPayments()
     {
-        return $this->hasMany(TuitionPayments::class);
+        return $this->hasMany(TuitionPayment::class);
     }
 }

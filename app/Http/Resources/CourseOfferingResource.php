@@ -17,8 +17,16 @@ class CourseOfferingResource extends JsonResource
             ->count();
 
         return [
-            'id'              => $this->id,
-            'subject'         => [
+            'id' => $this->id,
+            'university' => [
+                'id' => $this->university->id,
+                'name' => $this->university->name,
+            ],
+            'department' => [
+                'id' => $this->department->id,
+                'name' => $this->department->name,
+            ],
+            'subject' => [
                 'code' => $this->subject->code,
                 'name' => $this->subject->name,
             ],
@@ -26,13 +34,18 @@ class CourseOfferingResource extends JsonResource
                 'id'   => $prof->id,
                 'name' => $prof->user->first_name . ' ' . $prof->user->last_name,
             ]),
-            'semester'        => $this->semester->name,
-            'section'         => $this->section,
-            'schedule'        => $this->schedule,
-            'capacity'        => $this->capacity,
-            'enrolled_count'  => $activeCount,
+            'semester' => $this->semester->name,
+            'section' => $this->section,
+            'schedule' => $this->schedule,
+            'capacity' => $this->capacity,
+            'enrolled_count' => $activeCount,
             'enrolled'        => (bool) $myEnrollment,
             'enrollment_id'   => $myEnrollment?->id,
+            'professorat' => [
+                'id' => $this->professor_profile_id,
+                'name' => $this->professorProfile->user->first_name . ' ' . $this->professorProfile->user->last_name,
+            ],
         ];
     }
+
 }

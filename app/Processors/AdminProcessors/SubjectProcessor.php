@@ -5,6 +5,7 @@ namespace App\Processors\AdminProcessors;
 use App\Repositories\SubjectRepository;
 use Illuminate\Database\DatabaseManager;
 use App\Processors\BaseProcessor;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class SubjectProcessor extends BaseProcessor
@@ -48,5 +49,10 @@ class SubjectProcessor extends BaseProcessor
         $this->db->transaction(function () use ($id) {
             $this->repo->delete($id);
         });
+    }
+
+    public function getSubjectsByDeptId( int $deptId): Collection
+    {
+        return $this->repo->getByDepartment($deptId);
     }
 }

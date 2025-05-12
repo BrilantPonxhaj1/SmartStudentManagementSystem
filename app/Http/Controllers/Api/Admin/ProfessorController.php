@@ -58,6 +58,24 @@ class ProfessorController extends BaseAdminController
             return ApiResponseFactory::error('Failed to retrieve professor', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * GET /admin/professors/department/{id}
+     */
+    public function getProfessorsByDepartment(int $id): JsonResponse{
+        try{
+            $profs = $this->processor->professorsByDepartment($id);
+            return ApiResponseFactory::success([
+                'data' => ProfessorResource::collection($profs)
+            ], Response::HTTP_OK);
+        }catch (Throwable $e) {
+            return ApiResponseFactory::error(
+                'Failed to fetch professors by department ',
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
     /**
      * POST /admin/professors
      */

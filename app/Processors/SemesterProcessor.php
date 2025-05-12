@@ -4,6 +4,7 @@ namespace App\Processors;
 
 use App\Repositories\SemesterRepository;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 use DomainException;
@@ -60,6 +61,14 @@ class SemesterProcessor extends BaseProcessor
     {
         $this->db->transaction(fn() => $this->repo->delete($id));
 
+    }
+
+    /**
+     * Return all semesters belonging to $universityId.
+     */
+    public function semestersByUniversity(int $universityId): Collection
+    {
+        return $this->repo->getByUniversity($universityId);
     }
 
 
