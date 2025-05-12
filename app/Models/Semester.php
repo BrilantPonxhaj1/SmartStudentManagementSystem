@@ -21,6 +21,7 @@ class Semester extends Model
         'end_date',
         'registration_deadline',
         'description',
+        'max_courses',
     ];
 
     /**

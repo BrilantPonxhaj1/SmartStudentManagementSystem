@@ -25,18 +25,18 @@ class CourseOfferingRepository extends BaseRepository
             : $user->professorProfile;
 
         // 1) Start a query with *no* global scopes
-        $q = $this->model
+        $query = $this->model
             ->newQueryWithoutScopes()
             ->where('semester_id', $semesterId);
 
         // 2) Manually scope to the profile’s tenant IDs
         if ($profile) {
-            $q->where('university_id', $profile->university_id)
+            $query->where('university_id', $profile->university_id)
                 ->where('department_id', $profile->department_id);
         }
 
         // 3) Eager‐load relations
-        return $q->with(['subject','semester','enrollments','professors'])
+        return $query->with(['subject','semester','enrollments','professors'])
             ->get();
     }
 

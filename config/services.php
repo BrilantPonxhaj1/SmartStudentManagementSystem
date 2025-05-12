@@ -34,5 +34,21 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
+    /*
+|--------------------------------------------------------------------------
+| Passport OAuth Server
+|--------------------------------------------------------------------------
+|
+| Configuration for Laravel Passport OAuth2 token issuance via password grant.
+| Stores the token endpoint URL plus the client credentials.
+|
+*/
+    'passport' => [
+        // Full URL to the OAuth token endpoint; falls back to APP_URL/oauth/token
+        'token_url'     => env('PASSPORT_TOKEN_URL', env('APP_URL').'/oauth/token'),
+        // The ID of the password‐grant client
+        'client_id'     => env('PASSPORT_CLIENT_ID'),
+        // The secret of the password‐grant client
+        'client_secret' => env('PASSPORT_CLIENT_SECRET'),
+    ],
 ];
