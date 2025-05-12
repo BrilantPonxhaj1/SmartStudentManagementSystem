@@ -2,11 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Models\Semesters;
+use App\Models\Semester;
+use Illuminate\Support\Collection;
 
 class SemesterRepository extends BaseRepository
 {
-    public function __construct(Semesters $semester) {
+    public function __construct(Semester $semester) {
         parent::__construct($semester);
     }
 
@@ -43,5 +44,17 @@ class SemesterRepository extends BaseRepository
                 $query->whereBetween('start_date', [$data['start_date'], $data['end_date']])
                     ->orWhereBetween('end_date',   [$data['start_date'], $data['end_date']]);
             })->exists();
+    }
+
+    /**
+     *
+     * Get all semesters by university id
+     */
+
+    public function getByUniversity(int $universityId): Collection
+    {
+        return $this->model
+            ->where('university_id', $universityId)
+            ->get();
     }
 }

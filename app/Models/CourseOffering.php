@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Models\Scopes\TenantScope;
+use App\Models\Traits\TenantScoped;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CourseOffering extends Model
 {
-    use HasFactory;
+    use HasFactory,TenantScoped;
 
     /**
      * The table associated with the model.
@@ -35,15 +36,6 @@ class CourseOffering extends Model
     protected $casts = [
         'capacity' => 'integer',
     ];
-
-    /**
-     * Apply the tenant scope so every query is automatically
-     * filtered by the current user’s university (and department).
-     */
-    protected static function booted()
-    {
-        static::addGlobalScope(new TenantScope);
-    }
 
     /**
      * The university that this offering belongs to.
@@ -82,7 +74,7 @@ class CourseOffering extends Model
      */
     public function semester()
     {
-        return $this->belongsTo(Semesters::class);
+        return $this->belongsTo(Semester::class);
     }
 
     /**
@@ -115,5 +107,17 @@ class CourseOffering extends Model
     public function assignments()
     {
         return $this->hasMany(Assignment::class);
+    }
+
+    public function professors()
+    {
+        return $this->belongsToMany(
+            Professor::class,
+            'teaching_assignments',          // pivot table
+            'course_offering_id',            // this model’s FK
+            'professor_profile_id'           // related model’s FK
+        )
+            ->withPivot(['role','hours_per_week','office_hours'])
+            ->withTimestamps();
     }
 }

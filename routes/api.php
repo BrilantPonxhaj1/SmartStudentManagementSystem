@@ -6,9 +6,13 @@ use App\Http\Controllers\Api\Admin\SubjectController;
 use App\Http\Controllers\Api\Admin\UserManagementController;
 use App\Http\Controllers\Api\Admin\SemesterController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Student\CourseOfferingController;
+use App\Http\Controllers\Api\Student\EnrollmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\StudentController;
 use App\Http\Controllers\Api\Admin\ProfessorController;
+
+Route::post('/login', [AuthController::class, 'login']);
 
 Route::group([
     'prefix' => 'admin',
@@ -17,6 +21,7 @@ Route::group([
     //professors
     Route::get('/professors', [ProfessorController::class, 'index']);
     Route::get('/professors/{id}', [ProfessorController::class, 'show']);
+    Route::get('/professors/department/{id}', [ProfessorController::class, 'getProfessorsByDepartment']);
     Route::post('/professors', [ProfessorController::class, 'store']);
     Route::put('/professors/{id}', [ProfessorController::class, 'update']);
     Route::delete('/professors/{id}', [ProfessorController::class, 'destroy']);
@@ -33,16 +38,16 @@ Route::group([
     //courses
     Route::get('/subjects', [SubjectController::class, 'index']);
     Route::get('/subjects/{id}', [SubjectController::class, 'show']);
+    Route::get('/subjects/department/{id}', [SubjectController::class, 'byDepartment']);
     Route::post('/subjects', [SubjectController::class, 'store']);
     Route::put('/subjects/{id}', [SubjectController::class, 'update']);
     Route::delete('/subjects/{id}', [SubjectController::class, 'destroy']);
 
-    Route::get('/semester', [SemesterController::class, 'index']);
-    Route::get('/semester/{id}', [SemesterController::class, 'show']);
-    //p.s qeta dy geta me shume siguri duhet me i hjek prej api/admin se tani profesorit i duhet me i perdor qeta endpointa.
+    Route::get('/semesters/university/{id}', [SemesterController::class, 'getByUniversity']);
     Route::post('/semester', [SemesterController::class, 'store']);
     Route::put('/semester/{id}', [SemesterController::class, 'update']);
     Route::delete('/semester/{id}', [SemesterController::class, 'destroy']);
+
 
     // universities
     Route::get('/universities', [UniversityController::class, 'index']);
@@ -52,9 +57,28 @@ Route::group([
     Route::put('/universities/{id}', [UniversityController::class, 'update']);
     Route::delete('/universities/{id}', [UniversityController::class, 'destroy']);
 
-});
+    Route::get('/course-offerings', [CourseOfferingController::class, 'getAll']);
+    Route::get('/course-offerings/{id}', [CourseOfferingController::class, 'show']);
+    Route::post('/course-offerings', [CourseOfferingController::class, 'store']);
+    Route::put('/course-offerings/{id}', [CourseOfferingController::class, 'update']);
+    Route::delete('/course-offerings/{id}', [CourseOfferingController::class, 'destroy']);
 
-Route::post('/login', [AuthController::class, 'login'])->middleware('auth:api');
+
+
+});
+Route::middleware(['auth:api'])->group(function () {
+    Route::get('/semesters', [\App\Http\Controllers\Api\SemesterController::class, 'index']);
+    Route::get('/semesters/{id}', [\App\Http\Controllers\Api\SemesterController::class, 'show']);
+});
+Route::prefix('student')
+    ->middleware(['auth:api'])
+    ->group(function () {
+
+// List available course offerings
+        Route::get('course_offerings', [CourseOfferingController::class, 'index']);
+        Route::post('course_offerings/{courseOffering}/register', [EnrollmentController::class, 'register']);
+        Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy']);
+    });
 
 
 ?>

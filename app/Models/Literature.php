@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\TenantScoped;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Scopes\TenantScope;
 
 class Literature extends Model
 {
-    use HasFactory;
+    use HasFactory,TenantScoped;
 
     /**
      * The table associated with the model.

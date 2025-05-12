@@ -10,42 +10,14 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Exception;
+use Throwable;
 
 class SemesterController extends BaseAdminController
 {
-    protected SemesterProcessor $processor;
-    public function __construct( SemesterProcessor $processor)
+    public function __construct(protected SemesterProcessor $processor)
     {
-        $this->processor = $processor;
     }
 
-
-    public function index(): JsonResponse
-    {
-        try{
-            $items= $this->processor->list();
-            return response()->json([
-                'data' => SemesterResource::collection($items)
-            ], Response::HTTP_OK);
-        }catch (Exception $exception) {
-            return response()->json([
-                'message' => 'Error fetching semesters',
-                'error' => $exception->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-    public function show(int $id): JsonResponse
-    {
-        try {
-            $sem = $this->processor->get($id);
-            return response()->json([
-                'data' => new SemesterResource($sem)
-            ], Response::HTTP_OK);
-        } catch (ModelNotFoundException $exception) {
-            return response()->json(['message'=>'Semester not found',
-                "error" => $exception->getMessage()], Response::HTTP_NOT_FOUND);
-        }
-    }
     public function store(StoreSemesterRequest $request): JsonResponse
     {
         try{
@@ -90,6 +62,24 @@ class SemesterController extends BaseAdminController
                 'message'=>'Semester not found',
                 "error" => $exception->getMessage()]
                 , Response::HTTP_NOT_FOUND);
+        }
+    }
+    /**
+     * GET → admin/semesters/university/{universityId}
+     */
+    public function getByUniversity(int $universityId): JsonResponse
+    {
+        try {
+            $semesters = $this->processor->semestersByUniversity($universityId);
+
+            return response()->json([
+                'data' => SemesterResource::collection($semesters)
+            ], Response::HTTP_OK);
+        } catch (Throwable $e) {
+            return response()->json([
+                'message' => 'Failed to fetch semesters by university',
+                'error'   => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Scopes\TenantScope;
 use App\Models\Subject;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
 class SubjectRepository extends BaseRepository
 {
@@ -93,5 +94,13 @@ class SubjectRepository extends BaseRepository
         if ($subject) {
             $subject->delete();
         }
+    }
+
+    public function getByDepartment(int $deptId): Collection
+    {
+        return $this->model
+            ->with(['university'], ['department'])
+            ->where('department_id', $deptId)
+            ->get();
     }
 }
