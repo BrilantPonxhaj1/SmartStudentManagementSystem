@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Admin\UserManagementController;
 use App\Http\Controllers\Api\Admin\SemesterController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Student\CourseOfferingController;
+use App\Http\Controllers\Api\Student\EnrollmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\StudentController;
 use App\Http\Controllers\Api\Admin\ProfessorController;
@@ -61,6 +62,8 @@ Route::prefix('student')
 
 // List available course offerings
         Route::get('course_offerings', [CourseOfferingController::class, 'index']);
+        Route::post('course_offerings/{courseOffering}/register', [EnrollmentController::class, 'register']);
+        Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy']);
     });
 
 
