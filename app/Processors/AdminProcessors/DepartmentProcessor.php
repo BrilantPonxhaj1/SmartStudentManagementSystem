@@ -15,12 +15,25 @@ class DepartmentProcessor extends BaseProcessor
         parent::__construct($repo, $db);
     }
 
-    /**
-     * Return id + name for departments in a university.
-     */
-    public function listByUniversityId(int $uni): Collection
+    public function list()
     {
-        return $this->repo->listByUniversityId($uni);
+        return $this->repo->allWithRelations();
+    }
+
+    /**
+     * Override get() to include head & university.
+     */
+    public function get(int $id)
+    {
+        return $this->repo->findWithRelations($id);
+    }
+
+    /**
+     * Expose the university-scoped list.
+     */
+    public function listByUniversity(int $universityId)
+    {
+        return $this->repo->listByUniversityId($universityId);
     }
 
 }
