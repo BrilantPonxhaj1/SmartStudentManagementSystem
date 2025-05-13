@@ -35,6 +35,11 @@ Route::group([
 
     Route::get('/user', [AuthController::class, 'me']);
 
+
+    Route::get('/universities', [UniversityController::class, 'index']);
+    Route::get('/departments/university/{uni}', [DepartmentController::class, 'getDeptByUniversity']);
+
+
     //courses
     Route::get('/subjects', [SubjectController::class, 'index']);
     Route::get('/subjects/{id}', [SubjectController::class, 'show']);
@@ -62,6 +67,12 @@ Route::group([
     Route::post('/course-offerings', [CourseOfferingController::class, 'store']);
     Route::put('/course-offerings/{id}', [CourseOfferingController::class, 'update']);
     Route::delete('/course-offerings/{id}', [CourseOfferingController::class, 'destroy']);
+
+    Route::get   ('/departments',                   [DepartmentController::class, 'index']);
+    Route::get   ('/departments/{id}',              [DepartmentController::class, 'show']);
+    Route::post  ('/departments',                   [DepartmentController::class, 'store']);
+    Route::put   ('/departments/{id}',              [DepartmentController::class, 'update']);
+    Route::delete('/departments/{id}',              [DepartmentController::class, 'destroy']);
 
 
 
