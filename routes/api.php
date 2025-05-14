@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\DepartmentController;
+use App\Http\Controllers\Api\Admin\ExamController;
 use App\Http\Controllers\Api\Admin\UniversityController;
 use App\Http\Controllers\Api\Admin\SubjectController;
 use App\Http\Controllers\Api\Admin\UserManagementController;
@@ -74,7 +75,11 @@ Route::group([
     Route::put   ('/departments/{id}',              [DepartmentController::class, 'update']);
     Route::delete('/departments/{id}',              [DepartmentController::class, 'destroy']);
 
-
+    Route::get('/exams', [ExamController::class, 'index']);
+    Route::get('/exams/{id}', [ExamController::class, 'show']);
+    Route::post('/exams', [ExamController::class, 'store']);
+    Route::put('/exams/{id}', [ExamController::class, 'update']);
+    Route::delete('/exams/{id}', [ExamController::class, 'destroy']);
 
 });
 Route::middleware(['auth:api'])->group(function () {
