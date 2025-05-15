@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\CourseOffering;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class CourseOfferingRepository extends BaseRepository
@@ -75,6 +75,7 @@ class CourseOfferingRepository extends BaseRepository
 
         return $q->exists();
     }
+
     public function enrolledCount(int $offeringId): int {
         return $this->model
             ->newQuery()
@@ -82,5 +83,14 @@ class CourseOfferingRepository extends BaseRepository
             ->withCount('enrollments')
             ->first()
             ->enrollments_count;
+    }
+
+    public function getCoursesOfProfessor(int $professorId): Collection
+    {
+        return $this->model
+            ->newQuery()
+            ->where('professor_profile_id', $professorId)
+            ->with(['subject', 'semester'])
+            ->get();
     }
 }

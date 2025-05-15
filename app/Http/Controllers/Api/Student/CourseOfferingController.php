@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCourseOfferingRequest;
 use App\Http\Requests\UpdateCourseOfferingRequest;
 use App\Http\Resources\CourseOfferingResource;
+use App\Http\Resources\Admin\CourseOfferingResource as AdminCourseOfferingResource;
 use App\Processors\AdminProcessors\CourseOfferingProcessor;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class CourseOfferingController extends Controller
         try {
             $items = $this->processor->list();
             return  response()->json([
-                'data' => CourseOfferingResource::collection($items)
+                'data' => AdminCourseOfferingResource::collection($items)
             ], Response::HTTP_OK);
         }catch (Exception $exception){
             return response()->json(['message' => 'Error fetching course offerings',
@@ -58,7 +59,7 @@ class CourseOfferingController extends Controller
         try {
             $item = $this->processor->get($id);
             return  response()->json([
-                'data' => new CourseOfferingResource($item)
+                'data' => new AdminCourseOfferingResource($item)
             ], Response::HTTP_OK);
 
         }catch (ModelNotFoundException $e) {
@@ -80,7 +81,7 @@ class CourseOfferingController extends Controller
             $data = $request->validated();
             $course = $this->processor->create($data);
             return   response()->json([
-                'data' => new CourseOfferingResource($course)
+                'data' => new AdminCourseOfferingResource($course)
             ], Response::HTTP_CREATED);
         }catch (Exception $e){
             return  response()->json([
@@ -103,7 +104,7 @@ class CourseOfferingController extends Controller
             $data = $request->validated();
             $course = $this->processor->update( $id, $data);
             return   response()->json([
-               'data' => new CourseOfferingResource($course)
+               'data' => new AdminCourseOfferingResource($course)
             ], Response::HTTP_OK);
         }catch (ModelNotFoundException $e){
             return response()->json([
@@ -132,5 +133,24 @@ class CourseOfferingController extends Controller
         }
     }
 
+    /**
+     * Fetches course-offerings of that perticular professor
+     * @param int $professorId
+     * @return JsonResponse
+     */
 
+    public function coursesOfProfessor(int $professorId): JsonResponse
+    {
+        try{
+            $courses = $this->processor->getCoursesOfProfessor($professorId);
+            return response()->json([
+                'data' => AdminCourseOfferingResource::collection($courses)
+            ], Response::HTTP_OK);
+        }catch (Exception $e) {
+            return response()->json([
+                'message' => 'Error fetching courses of professor',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
 }
