@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\StudentController;
 use App\Http\Controllers\Api\Admin\ProfessorController;
 use App\Http\Controllers\Api\Professor\AssignmentController;
+use App\Http\Controllers\Api\SemesterController as GeneralSemesterController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -78,8 +79,8 @@ Route::group([
 
 });
 Route::middleware(['auth:api'])->group(function () {
-    Route::get('/semesters', [\App\Http\Controllers\Api\SemesterController::class, 'index']);
-    Route::get('/semesters/{id}', [\App\Http\Controllers\Api\SemesterController::class, 'show']);
+    Route::get('/semesters', [GeneralSemesterController::class, 'index']);
+    Route::get('/semesters/{id}', [GeneralSemesterController::class, 'show']);
 });
 Route::prefix('student')
     ->middleware(['auth:api'])
