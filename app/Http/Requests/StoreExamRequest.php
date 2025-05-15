@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\CourseOffering;
 use App\Models\Department;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
@@ -34,11 +35,16 @@ class StoreExamRequest extends FormRequest
         $validator->after(function ($validator) {
             $universityId = $this->input('university_id');
             $departmentId = $this->input('department_id');
+            $courseOfferingId = $this->input('course_offering_id');
 
             $department = Department::find($departmentId);
-
-            if (!$department || $department->university_id != $universityId) {
+            if (!$department || $department->university_id !== $universityId) {
                 $validator->errors()->add('department_id', 'The selected department does not belong to the given university.');
+            }
+
+            $offering = CourseOffering::find($courseOfferingId);
+            if (!$offering || $offering->university_id !== $universityId || $offering->department_id !== $departmentId) {
+                $validator->errors()->add('course_offering_id', 'The selected course offering does not match the university and department.');
             }
         });
     }
