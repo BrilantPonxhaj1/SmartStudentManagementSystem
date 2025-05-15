@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AssignmentType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,6 +21,10 @@ class Assignment extends Model
         'due_date',
         'max_score',
         'assignment_type',
+    ];
+    protected $casts =[
+        'due_date' => 'datetime',
+        'assignment_type' => AssignmentType::class,
     ];
 
     // Relationships

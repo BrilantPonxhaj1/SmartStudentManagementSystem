@@ -132,5 +132,26 @@ class CourseOfferingController extends Controller
         }
     }
 
+    /**
+     * Fetches course-offerings of that perticular professor
+     * @param int $professorId
+     * @return JsonResponse
+     */
+
+    public function coursesOfProfessor(int $professorId): JsonResponse
+    {
+        try{
+            $courses = $this->processor->getCoursesOfProfessor($professorId);
+            return response()->json([
+                'data' => CourseOfferingResource::collection($courses)
+            ], Response::HTTP_OK);
+        }catch (Exception $e) {
+            return response()->json([
+                'message' => 'Error fetching courses of professor',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
 
 }

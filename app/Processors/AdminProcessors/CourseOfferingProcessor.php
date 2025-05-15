@@ -7,7 +7,7 @@ use App\Processors\BaseProcessor;
 use App\Repositories\CourseOfferingRepository;
 use Exception;
 use Illuminate\Database\DatabaseManager;
-
+use Illuminate\Support\Collection;
 class CourseOfferingProcessor extends BaseProcessor
 {
     public function __construct(CourseOfferingRepository $repo, DatabaseManager $db)
@@ -57,7 +57,7 @@ class CourseOfferingProcessor extends BaseProcessor
             throw new Exception("Section already exists");
         }
 
-        if (!empty($data['schedule']) && $this->repo->professorHasScheduleConflict($data)) {
+        if (!empty($data['schedule']) && $this->repo->professorHasScheduleConflict($data, $id)) {
             throw new Exception('Schedule conflict: Professor is already assigned another offering at that time.');
         }
 
@@ -70,6 +70,17 @@ class CourseOfferingProcessor extends BaseProcessor
 
         return $this->db->transaction(fn() => $this->repo->update($id, $data)
         );
+    }
+
+
+    /**
+     * Fetches course-offerings of that perticular professor
+     * @param int $professorId
+     * @return Collection
+     */
+    public function getCoursesOfProfessor(int $professorId): Collection
+    {
+        return $this->repo->getCoursesOfProfessor($professorId);
     }
 
 }

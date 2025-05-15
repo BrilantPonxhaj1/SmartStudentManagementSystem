@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\Admin\DepartmentController;
 use App\Http\Controllers\Api\Admin\UniversityController;
 use App\Http\Controllers\Api\Admin\SubjectController;
-use App\Http\Controllers\Api\Admin\UserManagementController;
 use App\Http\Controllers\Api\Admin\SemesterController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Student\CourseOfferingController;
@@ -11,6 +10,7 @@ use App\Http\Controllers\Api\Student\EnrollmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\StudentController;
 use App\Http\Controllers\Api\Admin\ProfessorController;
+use App\Http\Controllers\Api\Professor\AssignmentController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -90,6 +90,19 @@ Route::prefix('student')
         Route::post('course_offerings/{courseOffering}/register', [EnrollmentController::class, 'register']);
         Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy']);
     });
+
+Route::group([
+    'prefix' => 'professor',
+    'middleware' => ['auth:api']
+], function () {
+   Route::get('/course-offerings/{id}', [CourseOfferingController::class, 'coursesOfProfessor']);
+
+   Route::get('/assignments', [AssignmentController::class, 'index']);
+   Route::get('/assignments/{id}', [AssignmentController::class, 'show']);
+   Route::post('/assignments', [AssignmentController::class, 'store']);
+   Route::put('/assignments/{id}', [AssignmentController::class, 'update']);
+   Route::delete('/assignments/{id}', [AssignmentController::class, 'destroy']);
+});
 
 
 ?>
