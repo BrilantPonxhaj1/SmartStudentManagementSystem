@@ -63,6 +63,7 @@ Route::group([
     Route::post('/universities', [UniversityController::class, 'store']);
     Route::put('/universities/{id}', [UniversityController::class, 'update']);
     Route::delete('/universities/{id}', [UniversityController::class, 'destroy']);
+    Route::get('/allUniversities', [UniversityController::class, 'getAllUniversities']);
 
     Route::get('/course-offerings', [CourseOfferingController::class, 'getAll']);
     Route::get('/course-offerings/{id}', [CourseOfferingController::class, 'show']);
