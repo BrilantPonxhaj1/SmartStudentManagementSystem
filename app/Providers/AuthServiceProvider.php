@@ -1,6 +1,7 @@
 <?php
 namespace App\Providers;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
 
@@ -13,6 +14,7 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerPolicies();
+        Passport::tokensExpireIn(Carbon::now()->addMinutes(60));
 
         // Register Passport routes
         Passport::enablePasswordGrant();
