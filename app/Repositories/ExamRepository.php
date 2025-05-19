@@ -18,9 +18,12 @@ class ExamRepository extends BaseRepository
         return $this->model->create($data);
     }
 
-    public function allExams(): Collection
+    public function allExamsForProfessor(int $professorId): Collection
     {
         return $this->model
+            ->whereHas('courseOffering', fn($q) =>
+            $q->where('professor_profile_id', $professorId)
+            )
             ->with(['university', 'department', 'courseOffering'])
             ->get();
     }
@@ -30,6 +33,17 @@ class ExamRepository extends BaseRepository
         return $this->model
             ->with(['university', 'department', 'courseOffering'])
             ->find($id);
+    }
+
+    public function findOwnedByProfessor(int $id, int $professorId): ?Model
+    {
+        return $this->model
+            ->where('id', $id)
+            ->whereHas('courseOffering', fn($q) =>
+            $q->where('professor_profile_id', $professorId)
+            )
+            ->with(['university', 'department', 'courseOffering'])
+            ->first();
     }
 
     public function update(int $id, array $data): Exam
