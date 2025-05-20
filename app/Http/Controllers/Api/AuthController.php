@@ -13,9 +13,15 @@ use OpenApi\Annotations as OA;
  * Class AuthController
  * @package App\Http\Controllers\Api
  */
+
+/**
+ * @OA\Tag(
+ *   name="Auth",
+ *   description="Authentication endpoints (login & current user)"
+ * )
+ */
 class AuthController
 {
-
     /**
      * @OA\Post(
      *     path="/api/login",

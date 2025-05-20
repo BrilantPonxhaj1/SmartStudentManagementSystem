@@ -14,7 +14,12 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreProfessorRequest;
 USE Throwable;
 
-
+/**
+ * @OA\Tag(
+ *   name="Professors",
+ *   description="CRUD operations for academic professors"
+ * )
+ */
 class ProfessorController extends BaseAdminController
 {
     protected ProfessorProcessor $processor;
@@ -25,7 +30,26 @@ class ProfessorController extends BaseAdminController
     }
 
     /**
-     * GET /admin/professors
+     * @OA\Get(
+     *     path="/api/admin/professors",
+     *     operationId="listProfessors",
+     *     tags={"Professors"},
+     *     summary="Get a list of all professors",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="A collection of professors",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Professor")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
      */
     public function index(): JsonResponse
     {
@@ -43,7 +67,30 @@ class ProfessorController extends BaseAdminController
     }
 
     /**
-     * GET /admin/professors/{id}
+     * @OA\Get(
+     *     path="/api/admin/professors/{id}",
+     *     operationId="getProfessorById",
+     *     tags={"Professors"},
+     *     summary="Retrieve a single professor by ID",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Professor ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Professor details",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="data", ref="#/components/schemas/Professor")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Professor not found"),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
      */
     public function show(int $id): JsonResponse
     {
@@ -60,7 +107,33 @@ class ProfessorController extends BaseAdminController
     }
 
     /**
-     * GET /admin/professors/department/{id}
+     * @OA\Get(
+     *     path="/api/admin/professors/department/{id}",
+     *     operationId="getProfessorsByDepartment",
+     *     tags={"Professors"},
+     *     summary="List professors by department ID",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Department ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=2)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Professors in the specified department",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Professor")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
      */
     public function getProfessorsByDepartment(int $id): JsonResponse{
         try{
@@ -77,7 +150,28 @@ class ProfessorController extends BaseAdminController
     }
 
     /**
-     * POST /admin/professors
+     * @OA\Post(
+     *     path="/api/admin/professors",
+     *     operationId="createProfessor",
+     *     tags={"Professors"},
+     *     summary="Create a new professor",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/StoreProfessorRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Professor created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Professor created successfully"),
+     *             @OA\Property(property="data", ref="#/components/schemas/Professor")
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
      */
     public function store(StoreProfessorRequest $request): JsonResponse
     {
@@ -96,7 +190,35 @@ class ProfessorController extends BaseAdminController
     }
 
     /**
-     * PUT /admin/professors/{id}
+     * @OA\Put(
+     *     path="/api/admin/professors/{id}",
+     *     operationId="updateProfessor",
+     *     tags={"Professors"},
+     *     summary="Update an existing professor",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Professor ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateProfessorRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Professor updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Professor updated successfully"),
+     *             @OA\Property(property="data", ref="#/components/schemas/Professor")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Professor not found"),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
      */
     public function update(UpdateProfessorRequest $request, int $id): JsonResponse
     {
@@ -116,7 +238,23 @@ class ProfessorController extends BaseAdminController
     }
 
     /**
-     * DELETE /admin/professors/{id}
+     * @OA\Delete(
+     *     path="/api/admin/professors/{id}",
+     *     operationId="deleteProfessor",
+     *     tags={"Professors"},
+     *     summary="Delete a professor",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Professor ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(response=200, description="Professor deleted successfully"),
+     *     @OA\Response(response=404, description="Professor not found"),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
      */
     public function destroy(int $id): JsonResponse
     {
