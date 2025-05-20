@@ -13,7 +13,12 @@ use Illuminate\Http\JsonResponse;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
-
+/**
+ * @OA\Tag(
+ *   name="Assignments",
+ *   description="Endpoints for professors to manage assignments"
+ * )
+ */
 class AssignmentController extends Controller
 {
 
@@ -22,7 +27,28 @@ class AssignmentController extends Controller
     {
         $this->processor = $processor;
     }
-
+    /**
+     * @OA\Get(
+     *     path="/api/professor/assignments",
+     *     operationId="listAssignments",
+     *     tags={"Assignments"},
+     *     summary="List all assignments for the authenticated professor",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="A collection of assignments",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Assignment")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
+     */
     public function index(): JsonResponse{
         try{
             $assignments = $this->processor->listWithRelations();
@@ -36,11 +62,30 @@ class AssignmentController extends Controller
 
 
     /**
-     * GET /api/professor/assignments/{id}
-     *
-     * @param int $id
-     * @return JsonResponse
-     * @throws Exception
+     * @OA\Get(
+     *     path="/api/professor/assignments/{id}",
+     *     operationId="getAssignmentById",
+     *     tags={"Assignments"},
+     *     summary="Get a specific assignment by ID",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Assignment ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=42)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Assignment details",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="data",   ref="#/components/schemas/Assignment")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Assignment not found"),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
      */
     public function show(int $id): JsonResponse{
         try{
@@ -57,13 +102,28 @@ class AssignmentController extends Controller
     }
 
     /**
-     * POST /api/professor/assignments
-     *
-     * @param StoreAssignmentsRequest $request
-     * @return JsonResponse
-     * @throws Exception
+     * @OA\Post(
+     *     path="/api/professor/assignments",
+     *     operationId="createAssignment",
+     *     tags={"Assignments"},
+     *     summary="Create a new assignment",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/StoreAssignmentsRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Assignment created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="data",   ref="#/components/schemas/Assignment")
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
      */
-
     public function store(StoreAssignmentsRequest $request): JsonResponse{
         try{
             $data = $request->validated();
@@ -81,12 +141,36 @@ class AssignmentController extends Controller
 
 
     /**
-     * DELETE /api/professor/assignments/{id}
-     *
-     * @param int $id
-     * @return JsonResponse
-     * @throws Exception
-     * @throws ModelNotFoundException
+     * @OA\Put(
+     *     path="/api/professor/assignments/{id}",
+     *     operationId="updateAssignment",
+     *     tags={"Assignments"},
+     *     summary="Update an existing assignment",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Assignment ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=42)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateAssignmentsRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Assignment updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status",  type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Assignment updated successfully"),
+     *             @OA\Property(property="data",    ref="#/components/schemas/Assignment")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Assignment not found"),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
      */
     public function update(UpdateAssignmentsRequest $request, int $id): JsonResponse{
         try{
@@ -107,7 +191,25 @@ class AssignmentController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
+    /**
+     * @OA\Delete(
+     *     path="/api/professor/assignments/{id}",
+     *     operationId="deleteAssignment",
+     *     tags={"Assignments"},
+     *     summary="Delete an assignment",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Assignment ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=42)
+     *     ),
+     *     @OA\Response(response=200, description="Assignment deleted successfully"),
+     *     @OA\Response(response=404, description="Assignment not found"),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
+     */
     public function destroy(int $id): JsonResponse{
         try{
             $this->processor->delete($id);
