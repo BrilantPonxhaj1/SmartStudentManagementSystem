@@ -121,7 +121,7 @@ class ExamController extends Controller
             /** @var User $user */
             $user = auth()->user();
             $professorId = $user->professorProfile->id;
-            $this->processor->delete($id, $professorId);
+            $this->processor->delete($id);
 
             return ApiResponseFactory::success(['message' => 'Exam deleted successfully'], Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {

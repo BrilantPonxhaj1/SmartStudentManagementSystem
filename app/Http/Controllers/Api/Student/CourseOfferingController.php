@@ -1,11 +1,14 @@
 <?php
 namespace App\Http\Controllers\Api\Student;
 
+use App\Factories\ApiResponseFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCourseOfferingRequest;
 use App\Http\Requests\UpdateCourseOfferingRequest;
 use App\Http\Resources\CourseOfferingResource;
 use App\Http\Resources\Admin\CourseOfferingResource as AdminCourseOfferingResource;
+use App\Models\Professor;
+use App\Models\User;
 use App\Processors\AdminProcessors\CourseOfferingProcessor;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -135,13 +138,22 @@ class CourseOfferingController extends Controller
 
     /**
      * Fetches course-offerings of that perticular professor
-     * @param int $professorId
+     * @param int $userId
      * @return JsonResponse
      */
 
-    public function coursesOfProfessor(int $professorId): JsonResponse
+    public function coursesOfProfessorByUserId(int $userId): JsonResponse
     {
         try{
+            /** @var User $user */
+            $user = User::find($userId);
+
+            if (!$user || !$user->professorProfile) {
+                return ApiResponseFactory::error('Professor not found.', Response::HTTP_FORBIDDEN);
+            }
+
+            $professorId = $user->professorProfile->id;
+
             $courses = $this->processor->getCoursesOfProfessor($professorId);
             return response()->json([
                 'data' => AdminCourseOfferingResource::collection($courses)

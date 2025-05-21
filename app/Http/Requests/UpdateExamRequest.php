@@ -17,14 +17,11 @@ class UpdateExamRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'university_id'      => ['required', 'integer', 'exists:universities,id'],
-            'department_id'      => ['required', 'integer', 'exists:departments,id'],
-            'course_offering_id' => ['required', 'integer', 'exists:course_offerings,id'],
             'title'              => ['required', 'string', 'max:255'],
             'exam_type'          => ['required', 'string', 'max:100'],
             'date'               => ['required', 'date'],
-            'duration'           => ['required', 'integer', 'min:0'],
-            'max_score'          => ['required', 'integer', 'min:0'],
+            'duration'           => ['required', 'integer', 'min:1'],
+            'max_score'          => ['required', 'integer', 'min:1', 'max:100'],
             'weight'             => ['required', 'numeric', 'between:0,100'],
             'description'        => ['nullable', 'string'],
         ];

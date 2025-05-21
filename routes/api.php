@@ -101,7 +101,7 @@ Route::group([
     'prefix' => 'professor',
     'middleware' => ['auth:api']
 ], function () {
-   Route::get('/course-offerings/{id}', [CourseOfferingController::class, 'coursesOfProfessor']);
+   Route::get('/course-offerings/{id}', [CourseOfferingController::class, 'coursesOfProfessorByUserId']);
 
    Route::get('/assignments', [AssignmentController::class, 'index']);
    Route::get('/assignments/{id}', [AssignmentController::class, 'show']);
