@@ -21,10 +21,10 @@ class StoreExamRequest extends FormRequest
             'department_id'     => ['required', 'integer', 'exists:departments,id'],
             'course_offering_id'=> ['required', 'integer', 'exists:course_offerings,id'],
             'title'             => ['required', 'string', 'max:255'],
-            'exam_type'         => ['required', 'string', 'in:midterm,final,quiz,project'],
+            'exam_type'         => ['required', 'string', 'max:100'],
             'date'              => ['required', 'date'],
-            'duration'           => ['required', 'integer', 'min:1'],
-            'max_score'          => ['required', 'integer', 'min:1', 'max:100'],
+            'duration'          => ['required', 'integer', 'min:0'],
+            'max_score'         => ['required', 'integer', 'min:0'],
             'weight'            => ['required', 'numeric', 'between:0,100'],
             'description'       => ['nullable', 'string'],
         ];
