@@ -8,7 +8,7 @@ use Laravel\Passport\Passport;
 class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        // Define your model to policy mappings here.
+        Complaint::class => ComplaintPolicy::class,
     ];
 
     public function boot(): void
