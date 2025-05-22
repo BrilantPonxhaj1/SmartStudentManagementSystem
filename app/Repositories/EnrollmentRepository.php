@@ -6,6 +6,7 @@ use App\Models\CourseOffering;
 use App\Models\Enrollment;
 use App\Models\Student;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\Collection;
 
 class EnrollmentRepository extends BaseRepository
 {
@@ -90,4 +91,17 @@ class EnrollmentRepository extends BaseRepository
     {
         $enrollment->update(['status' => 'dropped']);
     }
+    /**
+     * Get all enrollments for a specific course offering.
+     *
+     * @param  int  $courseOfferingId
+     * @return Collection
+     */
+    public function getEnrollmentsPerCourseOfferings(int $courseOfferingId): Collection
+    {
+        return Enrollment::where('course_offering_id', $courseOfferingId)
+            ->with(['studentProfile.user'])
+            ->get();
+    }
+
 }

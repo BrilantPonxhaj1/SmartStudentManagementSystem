@@ -117,6 +117,8 @@ Route::group([
     Route::get('/grades/{id}', [GradeController::class, 'show']);
     Route::post('/grades', [GradeController::class, 'store']);
     Route::delete('/grades/{id}', [GradeController::class, 'destroy']);
+
+    Route::get('/enrolledStudents/{professorId}', [EnrollmentController::class, 'getStudentsEnrolledInCourse']);
 });
 
 
