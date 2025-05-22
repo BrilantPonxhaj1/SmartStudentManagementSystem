@@ -12,13 +12,42 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Exception;
-
+/**
+ * @OA\Tag(
+ *   name="CourseOfferings",
+ *   description="Endpoints to manage course offerings for students, admins, and professors"
+ * )
+ */
 class CourseOfferingController extends Controller
 {
     public function __construct(protected CourseOfferingProcessor $processor) {}
 
     /**
-     * GET /api/student/course-offerings?semester_id=#
+     * @OA\Get(
+     *     path="/api/student/course_offerings",
+     *     operationId="listCourseOfferingsBySemester",
+     *     tags={"CourseOfferings"},
+     *     summary="List available course offerings for a given semester",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="semester_id",
+     *         in="query",
+     *         description="Semester ID to filter offerings",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=3)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="A collection of course offerings",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(ref="#/components/schemas/CourseOffering")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="semester_id is required"),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
      */
     public function index(Request $request): JsonResponse
     {
@@ -36,8 +65,23 @@ class CourseOfferingController extends Controller
         ]);
     }
     /**
-     * GET /api/superadmin/course-offerings
-     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/superadmin/course-offerings",
+     *     operationId="listAllCourseOfferings",
+     *     tags={"CourseOfferings"},
+     *     summary="List all course offerings (admin view)",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="A collection of all course offerings",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(ref="#/components/schemas/CourseOffering")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=500, description="Error fetching course offerings")
+     * )
      */
     public function getAll(): JsonResponse {
         try {
@@ -50,10 +94,31 @@ class CourseOfferingController extends Controller
                 'error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
     /**
-     * GET /api/superadmin/course-offerings/{id}
-     * @param int $id
-     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/superadmin/course-offerings/{id}",
+     *     operationId="getCourseOfferingById",
+     *     tags={"CourseOfferings"},
+     *     summary="Get a single course offering by ID (admin view)",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Course offering ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=10)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Course offering details",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", ref="#/components/schemas/CourseOffering")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Course offering not found"),
+     *     @OA\Response(response=500, description="Error retrieving course offering")
+     * )
      */
     public function show(int $id): JsonResponse {
         try {
@@ -69,11 +134,27 @@ class CourseOfferingController extends Controller
             ]);
         }
     }
-
     /**
-     * Creates a new course offering
-     * @param StoreCourseOfferingRequest $request
-     * @return JsonResponse
+     * @OA\Post(
+     *     path="/api/superadmin/course-offerings",
+     *     operationId="createCourseOffering",
+     *     tags={"CourseOfferings"},
+     *     summary="Create a new course offering (admin)",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/StoreCourseOfferingRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Course offering created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", ref="#/components/schemas/CourseOffering")
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=500, description="Error creating course offering")
+     * )
      */
     public function store(StoreCourseOfferingRequest $request): JsonResponse
     {
@@ -92,10 +173,33 @@ class CourseOfferingController extends Controller
     }
 
     /**
-     * Updates a course offering based on its id
-     * @param int $id
-     * @param UpdateCourseOfferingRequest $request
-     * @return JsonResponse
+     * @OA\Put(
+     *     path="/api/superadmin/course-offerings/{id}",
+     *     operationId="updateCourseOffering",
+     *     tags={"CourseOfferings"},
+     *     summary="Update an existing course offering (admin)",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Course offering ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=10)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateCourseOfferingRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Course offering updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", ref="#/components/schemas/CourseOffering")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Course offering not found"),
+     *     @OA\Response(response=500, description="Error updating course offering")
+     * )
      */
 
     public function update(int $id, UpdateCourseOfferingRequest $request): JsonResponse
@@ -115,9 +219,22 @@ class CourseOfferingController extends Controller
     }
 
     /**
-     * Deletes a course offering based on its id
-     * @param int $id
-     * @return JsonResponse
+     * @OA\Delete(
+     *     path="/api/superadmin/course-offerings/{id}",
+     *     operationId="deleteCourseOffering",
+     *     tags={"CourseOfferings"},
+     *     summary="Delete a course offering (admin)",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Course offering ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=10)
+     *     ),
+     *     @OA\Response(response=200, description="Course offering deleted successfully"),
+     *     @OA\Response(response=404, description="Course offering not found")
+     * )
      */
     public function destroy(int $id): JsonResponse {
         try {
@@ -132,13 +249,32 @@ class CourseOfferingController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
     }
-
     /**
-     * Fetches course-offerings of that perticular professor
-     * @param int $professorId
-     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/professor/course-offerings/{professorId}",
+     *     operationId="getCoursesOfProfessor",
+     *     tags={"CourseOfferings"},
+     *     summary="List course offerings for a specific professor",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="professorId",
+     *         in="path",
+     *         description="Professor ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=5)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Courses of professor",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(ref="#/components/schemas/CourseOffering")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=500, description="Error fetching courses of professor")
+     * )
      */
-
     public function coursesOfProfessor(int $professorId): JsonResponse
     {
         try{
