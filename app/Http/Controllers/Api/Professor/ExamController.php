@@ -1,24 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin;
+namespace App\Http\Controllers\Api\Professor;
 
 use App\Factories\ApiResponseFactory;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreExamRequest;
 use App\Http\Requests\UpdateExamRequest;
 use App\Http\Resources\ExamResource;
-use App\Processors\AdminProcessors\ExamProcessor;
-use Illuminate\Http\JsonResponse;
+use App\Models\User;
+use App\Processors\ExamProcessor;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
+
 /**
  * @OA\Tag(
  *   name="Exams",
  *   description="CRUD operations for exams"
  * )
  */
-class ExamController extends BaseAdminController
+class ExamController
 {
     protected ExamProcessor $processor;
 
@@ -51,12 +53,21 @@ class ExamController extends BaseAdminController
     public function index(): JsonResponse
     {
         try {
-            $exams = $this->processor->allExams();
+            /** @var User $user */
+            $user = auth()->user();
+
+            if (!$user || !$user->professorProfile) {
+                return ApiResponseFactory::error('Professor not found.', Response::HTTP_FORBIDDEN);
+            }
+
+            $professorId = $user->professorProfile->id;
+            $exams = $this->processor->allForProfessor($professorId);
+
             return ApiResponseFactory::success([
                 'data' => ExamResource::collection($exams)
             ], Response::HTTP_OK);
         } catch (Throwable $e) {
-            return ApiResponseFactory::error($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ApiResponseFactory::error('Failed to retrieve exams', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     /**
@@ -88,12 +99,23 @@ class ExamController extends BaseAdminController
     public function show(int $id): JsonResponse
     {
         try {
-            $exam = $this->processor->get($id);
+            /** @var User $user */
+            $user = auth()->user();
+
+            if (!$user || !$user->professorProfile) {
+                return ApiResponseFactory::error('Professor not found.', Response::HTTP_FORBIDDEN);
+            }
+
+            $professorId = $user->professorProfile->id;
+            $exam = $this->processor->getOwnedByProfessor($id, $professorId);
+
+            if (!$exam) {
+                return ApiResponseFactory::error('Exam not found', Response::HTTP_NOT_FOUND);
+            }
+
             return ApiResponseFactory::success([
                 'data' => new ExamResource($exam)
             ], Response::HTTP_OK);
-        } catch (ModelNotFoundException $e) {
-            return ApiResponseFactory::error('Exam not found', Response::HTTP_NOT_FOUND);
         } catch (Throwable $e) {
             return ApiResponseFactory::error('Failed to retrieve exam', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -125,7 +147,16 @@ class ExamController extends BaseAdminController
     public function store(StoreExamRequest $request): JsonResponse
     {
         try {
-            $exam = $this->processor->create($request->validated());
+            /** @var User $user */
+            $user = auth()->user();
+
+            if (!$user || !$user->professorProfile) {
+                return ApiResponseFactory::error('Professor not found.', Response::HTTP_FORBIDDEN);
+            }
+
+            $professorId = $user->professorProfile->id;
+            $exam = $this->processor->create($request->validated(), $professorId);
+
             return ApiResponseFactory::success([
                 'message' => 'Exam created successfully',
                 'data' => new ExamResource($exam)
@@ -168,13 +199,22 @@ class ExamController extends BaseAdminController
     public function update(UpdateExamRequest $request, int $id): JsonResponse
     {
         try {
-            $exam = $this->processor->update($id, $request->validated());
+            /** @var User $user */
+            $user = auth()->user();
+
+            if (!$user || !$user->professorProfile) {
+                return ApiResponseFactory::error('Professor not found.', Response::HTTP_FORBIDDEN);
+            }
+
+            $professorId = $user->professorProfile->id;
+            $exam = $this->processor->updateExam($id, $request->validated(), $professorId);
+
             return ApiResponseFactory::success([
                 'message' => 'Exam updated successfully',
                 'data' => new ExamResource($exam)
             ], Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
-            return ApiResponseFactory::error($e->getMessage(), Response::HTTP_NOT_FOUND);
+            return ApiResponseFactory::error('Exam not found', Response::HTTP_NOT_FOUND);
         } catch (Throwable $e) {
             return ApiResponseFactory::error($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -201,7 +241,11 @@ class ExamController extends BaseAdminController
     public function destroy(int $id): JsonResponse
     {
         try {
-            $this->processor->delete($id);
+            /** @var User $user */
+            $user = auth()->user();
+            $professorId = $user->professorProfile->id;
+            $this->processor->deleteExam($id, $professorId);
+
             return ApiResponseFactory::success(['message' => 'Exam deleted successfully'], Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             return ApiResponseFactory::error('Exam not found', Response::HTTP_NOT_FOUND);
