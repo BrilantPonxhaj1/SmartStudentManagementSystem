@@ -34,38 +34,34 @@ class User extends Authenticatable
     {
         return $this->hasOne(Student::class);
     }
+
     public function professorProfile()
     {
         return $this->hasOne(Professor::class);
     }
-    public function getFirstName(): ?string
-    {
-        return $this->attributes['first_name'] ?? null;
-    }
 
-    public function getLastName(): ?string
-    {
-        return $this->attributes['last_name'] ?? null;
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->attributes['username'] ?? null;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->attributes['email'] ?? null;
-    }
-
-    public function getPhone(): ?string
-    {
-        return $this->attributes['phone'] ?? null;
-    }
 
     public function getPassword(): ?string
     {
         return $this->attributes['password'] ?? null;
+    }
+
+    public function getProfileAttribute()
+    {
+        return $this->studentProfile
+            ?? $this->professorProfile
+            ?? null;
+    }
+
+
+    public function getUniversityIdAttribute(): ?int
+    {
+        return $this->profile?->university_id;
+    }
+
+    public function getDepartmentIdAttribute(): ?int
+    {
+        return $this->profile?->department_id;
     }
 
     public function getType(): ?string
