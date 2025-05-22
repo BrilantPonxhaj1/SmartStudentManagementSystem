@@ -21,6 +21,13 @@ class UniversityRepository extends BaseRepository
             ->get();
     }
 
+    public function listAll(): Collection
+    {
+        return $this->model
+            ->with(['departments', 'subjects'])
+            ->get();
+    }
+
     /**
      * Create a new university
      *
