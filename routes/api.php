@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\DepartmentController;
-use App\Http\Controllers\Api\Admin\ExamController;
 use App\Http\Controllers\Api\Admin\UniversityController;
 use App\Http\Controllers\Api\Admin\SubjectController;
 use App\Http\Controllers\Api\Admin\SemesterController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Professor\ExamController;
 use App\Http\Controllers\Api\Student\CourseOfferingController;
 use App\Http\Controllers\Api\Student\EnrollmentController;
 use Illuminate\Support\Facades\Route;
@@ -66,7 +66,6 @@ Route::group([
     Route::post('/universities', [UniversityController::class, 'store']);
     Route::put('/universities/{id}', [UniversityController::class, 'update']);
     Route::delete('/universities/{id}', [UniversityController::class, 'destroy']);
-    Route::get('/allUniversities', [UniversityController::class, 'getAllUniversities']);
 
     Route::get('/course-offerings', [CourseOfferingController::class, 'getAll']);
     Route::get('/course-offerings/{id}', [CourseOfferingController::class, 'show']);
@@ -121,6 +120,12 @@ Route::group([
    Route::post('/assignments', [AssignmentController::class, 'store']);
    Route::put('/assignments/{id}', [AssignmentController::class, 'update']);
    Route::delete('/assignments/{id}', [AssignmentController::class, 'destroy']);
+
+    Route::get('/exams', [ExamController::class, 'index']);
+    Route::get('/exams/{id}', [ExamController::class, 'show']);
+    Route::post('/exams', [ExamController::class, 'store']);
+    Route::put('/exams/{id}', [ExamController::class, 'update']);
+    Route::delete('/exams/{id}', [ExamController::class, 'destroy']);
 
     // Complaint routes (Professor)
     Route::post('/complaints/storeProfessorComplaint', [ProfessorComplaintController::class, 'storeProfessorComplaint']);
