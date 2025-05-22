@@ -207,7 +207,7 @@ class ExamController
             }
 
             $professorId = $user->professorProfile->id;
-            $exam = $this->processor->update($id, $request->validated(), $professorId);
+            $exam = $this->processor->updateExam($id, $request->validated(), $professorId);
 
             return ApiResponseFactory::success([
                 'message' => 'Exam updated successfully',
@@ -244,7 +244,7 @@ class ExamController
             /** @var User $user */
             $user = auth()->user();
             $professorId = $user->professorProfile->id;
-            $this->processor->delete($id, $professorId);
+            $this->processor->deleteExam($id, $professorId);
 
             return ApiResponseFactory::success(['message' => 'Exam deleted successfully'], Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
