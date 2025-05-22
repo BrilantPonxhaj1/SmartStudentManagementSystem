@@ -14,7 +14,7 @@ use Throwable;
  *   description="CRUD operations for students"
  * )
  */
-class StudentController extends BaseAdminController
+class StudentController
 {
     protected StudentProcessor $processor;
 

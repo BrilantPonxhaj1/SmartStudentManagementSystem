@@ -21,7 +21,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::group([
     'prefix' => 'admin',
-    'middleware' => ['auth:api'] // to ensure type=superadmin
+    'middleware' => ['auth:api','role:superadmin'],
 ], function () {
     //professors
     Route::get('/professors', [ProfessorController::class, 'index']);
@@ -95,9 +95,10 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/semesters', [GeneralSemesterController::class, 'index']);
     Route::get('/semesters/{id}', [GeneralSemesterController::class, 'show']);
 });
-Route::prefix('student')
-    ->middleware(['auth:api'])
-    ->group(function () {
+Route::group([
+    'prefix'=>'student',
+    'middleware' => ['auth:api','role:student'],
+    ], function () {
 
 // List available course offerings
         Route::get('course_offerings', [CourseOfferingController::class, 'index']);
@@ -111,7 +112,7 @@ Route::prefix('student')
 
 Route::group([
     'prefix' => 'professor',
-    'middleware' => ['auth:api']
+    'middleware' => ['auth:api','role:professor'],
 ], function () {
    Route::get('/course-offerings/{id}', [CourseOfferingController::class, 'coursesOfProfessor']);
 

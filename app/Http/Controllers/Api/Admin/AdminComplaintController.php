@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-class AdminComplaintController extends BaseAdminController
+class AdminComplaintController
 {
     protected ComplaintProcessor $processor;
 

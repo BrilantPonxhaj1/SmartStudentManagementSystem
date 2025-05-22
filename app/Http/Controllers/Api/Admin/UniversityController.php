@@ -19,7 +19,7 @@ use Throwable;
  *   description="CRUD operations for universities"
  * )
  */
-class UniversityController extends Controller
+class UniversityController
 {
     public function __construct(protected UniversityProcessor $processor)
     {

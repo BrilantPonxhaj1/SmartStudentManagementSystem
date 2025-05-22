@@ -17,7 +17,7 @@ use Throwable;
  *   description="CRUD operations for academic subjects"
  * )
  */
-class SubjectController extends BaseAdminController
+class SubjectController
 {
     protected SubjectProcessor $processor;
 

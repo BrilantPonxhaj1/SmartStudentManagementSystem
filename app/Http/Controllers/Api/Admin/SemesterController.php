@@ -17,7 +17,7 @@ use Throwable;
  *   description="CRUD operations for academic semesters"
  * )
  */
-class SemesterController extends BaseAdminController
+class SemesterControlle
 {
     public function __construct(protected SemesterProcessor $processor)
     {
