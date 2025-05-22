@@ -20,7 +20,7 @@ use Throwable;
  *   description="CRUD operations for exams"
  * )
  */
-class ExamController extends BaseAdminController
+class ExamController
 {
     protected ExamProcessor $processor;
 
