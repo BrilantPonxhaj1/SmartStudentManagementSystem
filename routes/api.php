@@ -13,6 +13,9 @@ use App\Http\Controllers\Api\Admin\StudentController;
 use App\Http\Controllers\Api\Admin\ProfessorController;
 use App\Http\Controllers\Api\Professor\AssignmentController;
 use App\Http\Controllers\Api\SemesterController as GeneralSemesterController;
+use App\Http\Controllers\Api\Admin\AdminComplaintController;
+use App\Http\Controllers\Api\Professor\ProfessorComplaintController;
+use App\Http\Controllers\Api\Student\StudentComplaintController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -76,6 +79,11 @@ Route::group([
     Route::put   ('/departments/{id}',              [DepartmentController::class, 'update']);
     Route::delete('/departments/{id}',              [DepartmentController::class, 'destroy']);
 
+    // Complaint routes (Admin)
+    Route::get('/complaints', [AdminComplaintController::class, 'index']);
+    Route::put('/complaints/{id}', [AdminComplaintController::class, 'update']);
+    Route::get('/complaints/open', [AdminComplaintController::class, 'getOpenComplaints']);
+
     Route::get('/exams', [ExamController::class, 'index']);
     Route::get('/exams/{id}', [ExamController::class, 'show']);
     Route::post('/exams', [ExamController::class, 'store']);
@@ -95,6 +103,10 @@ Route::prefix('student')
         Route::get('course_offerings', [CourseOfferingController::class, 'index']);
         Route::post('course_offerings/{courseOffering}/register', [EnrollmentController::class, 'register']);
         Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy']);
+
+        // Complaint routes (Student)
+        Route::post('/complaints/storeStudentComplaint', [StudentComplaintController::class, 'storeStudentComplaint']);
+        Route::get('/complaints/getStudentComplaints/{id}', [StudentComplaintController::class, 'getStudentComplaintsByUserId']);
     });
 
 Route::group([
@@ -114,6 +126,12 @@ Route::group([
     Route::post('/exams', [ExamController::class, 'store']);
     Route::put('/exams/{id}', [ExamController::class, 'update']);
     Route::delete('/exams/{id}', [ExamController::class, 'destroy']);
+
+    // Complaint routes (Professor)
+    Route::post('/complaints/storeProfessorComplaint', [ProfessorComplaintController::class, 'storeProfessorComplaint']);
+    Route::get('/complaints/getProfessorComplaints/{id}', [ProfessorComplaintController::class, 'getProfessorComplaintsByUserId']);
+
+
 });
 
 

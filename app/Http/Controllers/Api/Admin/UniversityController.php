@@ -25,6 +25,20 @@ class UniversityController extends Controller
     {
         $this->processor = $processor;
     }
+
+    public function getAllUniversities(): JsonResponse {
+        try{
+            $unis= $this->processor->listAll();
+            return response()->json(
+                $unis
+            );
+        }catch (Exception $exception){
+            return response()->json([
+                'message' => 'Failed to fetch universities -> ', $exception
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     /**
      * @OA\Get(
      *     path="/api/admin/universities",
