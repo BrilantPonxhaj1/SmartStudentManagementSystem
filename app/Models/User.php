@@ -78,13 +78,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(Professor::class);
     }
-
-
-    public function getPassword(): ?string
-    {
-        return $this->attributes['password'] ?? null;
-    }
-
+    
     public function getProfileAttribute()
     {
         return $this->studentProfile
@@ -102,5 +96,5 @@ class User extends Authenticatable
     {
         return $this->profile?->department_id;
     }
-    
+
 }
