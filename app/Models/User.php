@@ -29,6 +29,45 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    public function getFirstName(): ?string
+    {
+        return $this->attributes['first_name'] ?? null;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->attributes['last_name'] ?? null;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->attributes['email'] ?? null;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->attributes['phone'] ?? null;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->attributes['password'] ?? null;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->attributes['type'] ?? null;
+    }
+
+    public function getUniversityId(): ?int
+    {
+        return $this->attributes['university_id'] ?? null;
+    }
+
+    public function getDepartmentId(): ?int
+    {
+        return $this->attributes['department_id'] ?? null;
+    }
 
     public function studentProfile()
     {
@@ -63,9 +102,5 @@ class User extends Authenticatable
     {
         return $this->profile?->department_id;
     }
-
-    public function getType(): ?string
-    {
-        return $this->attributes['type'] ?? null;
-    }
+    
 }
