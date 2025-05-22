@@ -57,9 +57,4 @@ class StudentProcessor extends BaseProcessor
         });
     }
 
-    // Example: Get students by status
-    public function getByStatus(string $status)
-    {
-        return $this->repo->getByStatus($status);
-    }
 }

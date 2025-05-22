@@ -14,7 +14,13 @@ use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-class ExamController extends Controller
+/**
+ * @OA\Tag(
+ *   name="Exams",
+ *   description="CRUD operations for exams"
+ * )
+ */
+class ExamController extends BaseAdminController
 {
     protected ExamProcessor $processor;
 
@@ -22,7 +28,28 @@ class ExamController extends Controller
     {
         $this->processor = $processor;
     }
-
+    /**
+     * @OA\Get(
+     *     path="/api/admin/exams",
+     *     operationId="listExams",
+     *     tags={"Exams"},
+     *     summary="Get all exams",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="A list of exams",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Exam")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=500, description="Server error")
+     * )
+     */
     public function index(): JsonResponse
     {
         try {
@@ -43,7 +70,32 @@ class ExamController extends Controller
             return ApiResponseFactory::error('Failed to retrieve exams', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
+    /**
+     * @OA\Get(
+     *     path="/api/admin/exams/{id}",
+     *     operationId="getExamById",
+     *     tags={"Exams"},
+     *     summary="Get a specific exam by ID",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Exam ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Exam details",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="data", ref="#/components/schemas/Exam")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Exam not found"),
+     *     @OA\Response(response=500, description="Server error")
+     * )
+     */
     public function show(int $id): JsonResponse
     {
         try {
@@ -68,7 +120,30 @@ class ExamController extends Controller
             return ApiResponseFactory::error('Failed to retrieve exam', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
+    /**
+     * @OA\Post(
+     *     path="/api/admin/exams",
+     *     operationId="createExam",
+     *     tags={"Exams"},
+     *     summary="Create a new exam",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/StoreExamRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Exam created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Exam created successfully"),
+     *             @OA\Property(property="data", ref="#/components/schemas/Exam")
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=500, description="Server error")
+     * )
+     */
     public function store(StoreExamRequest $request): JsonResponse
     {
         try {
@@ -90,7 +165,37 @@ class ExamController extends Controller
             return ApiResponseFactory::error($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
+    /**
+     * @OA\Put(
+     *     path="/api/admin/exams/{id}",
+     *     operationId="updateExam",
+     *     tags={"Exams"},
+     *     summary="Update an existing exam",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Exam ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateExamRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Exam updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Exam updated successfully"),
+     *             @OA\Property(property="data", ref="#/components/schemas/Exam")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Exam not found"),
+     *     @OA\Response(response=500, description="Server error")
+     * )
+     */
     public function update(UpdateExamRequest $request, int $id): JsonResponse
     {
         try {
@@ -114,7 +219,25 @@ class ExamController extends Controller
             return ApiResponseFactory::error($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
+    /**
+     * @OA\Delete(
+     *     path="/api/admin/exams/{id}",
+     *     operationId="deleteExam",
+     *     tags={"Exams"},
+     *     summary="Delete an exam",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Exam ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(response=200, description="Exam deleted successfully"),
+     *     @OA\Response(response=404, description="Exam not found"),
+     *     @OA\Response(response=500, description="Server error")
+     * )
+     */
     public function destroy(int $id): JsonResponse
     {
         try {
