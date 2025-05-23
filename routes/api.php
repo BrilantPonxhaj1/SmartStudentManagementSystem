@@ -18,7 +18,6 @@ use App\Http\Controllers\Api\Professor\ProfessorComplaintController;
 use App\Http\Controllers\Api\Student\StudentComplaintController;
 
 Route::post('/login', [AuthController::class, 'login']);
-
 Route::group([
     'prefix' => 'admin',
     'middleware' => ['auth:api','role:superadmin'],
@@ -38,7 +37,6 @@ Route::group([
     Route::delete('/students/{id}', [StudentController::class, 'destroy']);
     Route::put('/students/{id}', [StudentController::class, 'update']);
 
-    Route::get('/user', [AuthController::class, 'me']);
 
 
     Route::get('/universities', [UniversityController::class, 'index']);
@@ -83,6 +81,7 @@ Route::group([
     Route::get('/complaints', [AdminComplaintController::class, 'index']);
     Route::put('/complaints/{id}', [AdminComplaintController::class, 'update']);
     Route::get('/complaints/open', [AdminComplaintController::class, 'getOpenComplaints']);
+    Route::get('/user', [AuthController::class, 'me']);
 
     Route::get('/exams', [ExamController::class, 'index']);
     Route::get('/exams/{id}', [ExamController::class, 'show']);
@@ -134,6 +133,7 @@ Route::group([
 
 
 });
+
 
 
 ?>
