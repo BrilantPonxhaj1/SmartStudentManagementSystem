@@ -20,7 +20,7 @@ USE Throwable;
  *   description="CRUD operations for academic professors"
  * )
  */
-class ProfessorController extends BaseAdminController
+class ProfessorController
 {
     protected ProfessorProcessor $processor;
 

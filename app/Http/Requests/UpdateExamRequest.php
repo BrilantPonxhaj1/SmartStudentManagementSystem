@@ -11,7 +11,7 @@ class UpdateExamRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->getType() === 'superadmin';
+        return $this->user()?->getType() === 'teacher';
     }
 
     public function rules(): array
@@ -28,25 +28,6 @@ class UpdateExamRequest extends FormRequest
             'weight'             => ['required', 'numeric', 'between:0,100'],
             'description'        => ['nullable', 'string'],
         ];
-    }
-
-    public function withValidator($validator): void
-    {
-        $validator->after(function ($validator) {
-            $universityId = $this->input('university_id');
-            $departmentId = $this->input('department_id');
-            $courseOfferingId = $this->input('course_offering_id');
-
-            $department = Department::find($departmentId);
-            if (!$department || $department->university_id !== $universityId) {
-                $validator->errors()->add('department_id', 'The selected department does not belong to the given university.');
-            }
-
-            $offering = CourseOffering::find($courseOfferingId);
-            if (!$offering || $offering->university_id !== $universityId || $offering->department_id !== $departmentId) {
-                $validator->errors()->add('course_offering_id', 'The selected course offering does not match the university and department.');
-            }
-        });
     }
 
 }

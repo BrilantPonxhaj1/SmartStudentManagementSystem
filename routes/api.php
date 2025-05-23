@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\DepartmentController;
-use App\Http\Controllers\Api\Admin\ExamController;
 use App\Http\Controllers\Api\Admin\UniversityController;
 use App\Http\Controllers\Api\Admin\SubjectController;
 use App\Http\Controllers\Api\Admin\SemesterController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Professor\ProfessorAppointmentController;
+use App\Http\Controllers\Api\Professor\ExamController;
 use App\Http\Controllers\Api\Student\CourseOfferingController;
 use App\Http\Controllers\Api\Student\EnrollmentController;
 use App\Http\Controllers\Api\Student\StudentAppointmentController;
@@ -16,12 +16,16 @@ use App\Http\Controllers\Api\Student\StudentController as SecondStudentControlle
 use App\Http\Controllers\Api\Admin\ProfessorController;
 use App\Http\Controllers\Api\Professor\AssignmentController;
 use App\Http\Controllers\Api\SemesterController as GeneralSemesterController;
+use App\Http\Controllers\Api\Professor\GradeController;
+use App\Http\Controllers\Api\Professor\ProfessorController as ProfController;
+use App\Http\Controllers\Api\Admin\AdminComplaintController;
+use App\Http\Controllers\Api\Professor\ProfessorComplaintController;
+use App\Http\Controllers\Api\Student\StudentComplaintController;
 
 Route::post('/login', [AuthController::class, 'login']);
-
 Route::group([
     'prefix' => 'admin',
-    'middleware' => ['auth:api'] // to ensure type=superadmin
+    'middleware' => ['auth:api','role:superadmin'],
 ], function () {
     //professors
     Route::get('/professors', [ProfessorController::class, 'index']);
@@ -38,7 +42,6 @@ Route::group([
     Route::delete('/students/{id}', [StudentController::class, 'destroy']);
     Route::put('/students/{id}', [StudentController::class, 'update']);
 
-    Route::get('/user', [AuthController::class, 'me']);
 
 
     Route::get('/universities', [UniversityController::class, 'index']);
@@ -80,6 +83,12 @@ Route::group([
     Route::put   ('/departments/{id}',              [DepartmentController::class, 'update']);
     Route::delete('/departments/{id}',              [DepartmentController::class, 'destroy']);
 
+    // Complaint routes (Admin)
+    Route::get('/complaints', [AdminComplaintController::class, 'index']);
+    Route::put('/complaints/{id}', [AdminComplaintController::class, 'update']);
+    Route::get('/complaints/open', [AdminComplaintController::class, 'getOpenComplaints']);
+    Route::get('/user', [AuthController::class, 'me']);
+
     Route::get('/exams', [ExamController::class, 'index']);
     Route::get('/exams/{id}', [ExamController::class, 'show']);
     Route::post('/exams', [ExamController::class, 'store']);
@@ -91,14 +100,16 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/semesters', [GeneralSemesterController::class, 'index']);
     Route::get('/semesters/{id}', [GeneralSemesterController::class, 'show']);
 });
-Route::prefix('student')
-    ->middleware(['auth:api'])
-    ->group(function () {
+Route::group([
+    'prefix'=>'student',
+    'middleware' => ['auth:api','role:student'],
+    ], function () {
 
 // List available course offerings
         Route::get('course_offerings', [CourseOfferingController::class, 'index']);
         Route::post('course_offerings/{courseOffering}/register', [EnrollmentController::class, 'register']);
         Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy']);
+
 
         Route::get('/appointments', [StudentAppointmentController::class, 'getStudentAppointments']);
         Route::post('/appointments', [StudentAppointmentController::class, 'store']);
@@ -106,12 +117,18 @@ Route::prefix('student')
 
         Route::get('/getStudentByUser', [SecondStudentController::class, 'getStudentByUser']);
         Route::get('/professors', [SecondStudentController::class, 'getProfessorsByStudentDept']);
+
+        // Complaint routes (Student)
+        Route::post('/complaints/storeStudentComplaint', [StudentComplaintController::class, 'storeStudentComplaint']);
+        Route::get('/complaints/getStudentComplaints/{id}', [StudentComplaintController::class, 'getStudentComplaintsByUserId']);
+
     });
 
 Route::group([
     'prefix' => 'professor',
-    'middleware' => ['auth:api']
+    'middleware' => ['auth:api','role:professor'],
 ], function () {
+    Route::get('/users/{userid}', [ProfController::class, 'getProfessorFromUser']);
    Route::get('/course-offerings/{id}', [CourseOfferingController::class, 'coursesOfProfessor']);
 
    Route::get('/assignments', [AssignmentController::class, 'index']);
@@ -120,11 +137,33 @@ Route::group([
    Route::put('/assignments/{id}', [AssignmentController::class, 'update']);
    Route::delete('/assignments/{id}', [AssignmentController::class, 'destroy']);
 
+
     Route::get('/appointments', [ProfessorAppointmentController::class, 'getProfessorAppointments']);
     Route::get('/appointments/{id}', [ProfessorAppointmentController::class, 'show']);
     Route::put('/appointments/{id}', [ProfessorAppointmentController::class, 'update']);
     Route::delete('/appointments/{id}', [StudentAppointmentController::class, 'destroy']);
+
+    Route::get('/grades', [GradeController::class, 'index']);
+    Route::get('/grades/{id}', [GradeController::class, 'show']);
+    Route::post('/grades', [GradeController::class, 'store']);
+    Route::delete('/grades/{id}', [GradeController::class, 'destroy']);
+
+
+    Route::get('/enrolledStudents/{professorId}', [EnrollmentController::class, 'getStudentsEnrolledInCourse']);
+
+    Route::get('/exams', [ExamController::class, 'index']);
+    Route::get('/exams/{id}', [ExamController::class, 'show']);
+    Route::post('/exams', [ExamController::class, 'store']);
+    Route::put('/exams/{id}', [ExamController::class, 'update']);
+    Route::delete('/exams/{id}', [ExamController::class, 'destroy']);
+
+    // Complaint routes (Professor)
+    Route::post('/complaints/storeProfessorComplaint', [ProfessorComplaintController::class, 'storeProfessorComplaint']);
+    Route::get('/complaints/getProfessorComplaints/{id}', [ProfessorComplaintController::class, 'getProfessorComplaintsByUserId']);
+
+
 });
+
 
 
 ?>

@@ -23,7 +23,7 @@ use Throwable;
  *   description="CRUD operations for academic departments"
  * )
  */
-class DepartmentController extends BaseAdminController
+class DepartmentController
 {
     public function __construct(protected DepartmentProcessor $processor)
     {

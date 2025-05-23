@@ -29,15 +29,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
-    public function studentProfile()
-    {
-        return $this->hasOne(Student::class);
-    }
-    public function professorProfile()
-    {
-        return $this->hasOne(Professor::class);
-    }
     public function getFirstName(): ?string
     {
         return $this->attributes['first_name'] ?? null;
@@ -46,11 +37,6 @@ class User extends Authenticatable
     public function getLastName(): ?string
     {
         return $this->attributes['last_name'] ?? null;
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->attributes['username'] ?? null;
     }
 
     public function getEmail(): ?string
@@ -72,4 +58,43 @@ class User extends Authenticatable
     {
         return $this->attributes['type'] ?? null;
     }
+
+    public function getUniversityId(): ?int
+    {
+        return $this->attributes['university_id'] ?? null;
+    }
+
+    public function getDepartmentId(): ?int
+    {
+        return $this->attributes['department_id'] ?? null;
+    }
+
+    public function studentProfile()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function professorProfile()
+    {
+        return $this->hasOne(Professor::class);
+    }
+    
+    public function getProfileAttribute()
+    {
+        return $this->studentProfile
+            ?? $this->professorProfile
+            ?? null;
+    }
+
+
+    public function getUniversityIdAttribute(): ?int
+    {
+        return $this->profile?->university_id;
+    }
+
+    public function getDepartmentIdAttribute(): ?int
+    {
+        return $this->profile?->department_id;
+    }
+
 }

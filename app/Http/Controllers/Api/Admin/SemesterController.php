@@ -17,7 +17,7 @@ use Throwable;
  *   description="CRUD operations for academic semesters"
  * )
  */
-class SemesterController extends BaseAdminController
+class SemesterControlle
 {
     public function __construct(protected SemesterProcessor $processor)
     {
@@ -90,6 +90,8 @@ class SemesterController extends BaseAdminController
     {
         try{
             $data = $request->validated();
+            $old = $this->processor->get($id);
+            $data['university_id'] = $old->university_id;
             $newSemester = $this->processor->update($id,$data);
             return response()->json([
                 'data' => new SemesterResource($newSemester)

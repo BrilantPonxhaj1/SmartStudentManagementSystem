@@ -37,13 +37,15 @@ class SemesterRepository extends BaseRepository
      */
     public function checkOverlapOnUpdate(int $excludeId, array $data): bool
     {
+        $univ = $data['university_id']
+            ?? $this->model->findOrFail($excludeId)->university_id;
+
         return $this->model->newQuery()
-            ->where('university_id', $data['university_id'])
+            ->where('university_id', $univ)
             ->where('id', '!=', $excludeId)
-            ->where(function ($query) use ($data) {
-                $query->whereBetween('start_date', [$data['start_date'], $data['end_date']])
-                    ->orWhereBetween('end_date',   [$data['start_date'], $data['end_date']]);
-            })->exists();
+            ->where('start_date', '<=', $data['end_date'])
+            ->where('end_date',   '>=', $data['start_date'])
+            ->exists();
     }
 
     /**

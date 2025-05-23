@@ -67,7 +67,7 @@ class AuthController
         ]);
 
         $user = User::where('email', $request->input('email'))->first();
-        if ($user->getEmail() !== $request->input('email')) {
+        if ($user->email !== $request->input('email')) {
             return ApiResponseFactory::error('Unauthorized. Email does not match the authenticated user.',401);
         }
 

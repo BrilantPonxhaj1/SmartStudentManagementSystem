@@ -1,23 +1,33 @@
 <?php
 
-namespace App\Processors\AdminProcessors;
+namespace App\Processors;
 
 use App\Processors\BaseProcessor;
-use App\Repositories\ExamRepository;
+use App\Repositories\ComplaintRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-class ExamProcessor extends BaseProcessor
+class ComplaintProcessor extends BaseProcessor
 {
-    public function __construct(ExamRepository $repo, DatabaseManager $db)
+    public function __construct(ComplaintRepository $repo, DatabaseManager $db)
     {
         parent::__construct($repo, $db);
     }
 
-    public function allExams(): Collection
+    public function allComplaints(): Collection
     {
-        return $this->repo->allExams();
+        return $this->repo->allComplaints();
+    }
+
+    public function getAllByUserId(int $userId): Collection
+    {
+        return $this->repo->getAllByUserId($userId);
+    }
+
+    public function getAllExceptClosed(): Collection
+    {
+        return $this->repo->getAllExceptClosed();
     }
 
     public function get(int $id): ?Model
@@ -30,19 +40,9 @@ class ExamProcessor extends BaseProcessor
         return $this->db->transaction(fn() => $this->repo->create($data));
     }
 
-    /**
-     * @throws \Throwable
-     */
     public function update(int $id, array $data): Model
     {
         return $this->db->transaction(fn() => $this->repo->update($id, $data));
     }
 
-    /**
-     * @throws \Throwable
-     */
-    public function delete(int $id): void
-    {
-        $this->db->transaction(fn() => $this->repo->delete($id));
-    }
 }

@@ -24,6 +24,11 @@ class UniversityProcessor extends BaseProcessor
         return $this->repo->listForSelect();
     }
 
+    public function listAll(): Collection
+    {
+        return $this->repo->listAll();
+    }
+
     public function get(int $id): ?Model
     {
         return $this->repo->find($id);

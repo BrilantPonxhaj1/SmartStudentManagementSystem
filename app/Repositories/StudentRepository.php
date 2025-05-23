@@ -5,21 +5,17 @@ namespace App\Repositories;
 use App\Models\Professor;
 use App\Models\Student;
 use App\Models\User;
+use App\Repositories\Traits\Cacheable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class StudentRepository extends BaseRepository
 {
+    use Cacheable;
     public function __construct(Student $student)
     {
         parent::__construct($student);
-    }
-
-    // maybe we will use it later
-    public function getByStatus(string $status): Collection
-    {
-        return $this->model->where('status', $status)->get();
     }
 
     /**
@@ -27,15 +23,19 @@ class StudentRepository extends BaseRepository
      */
     public function all(array $columns = ['*']): Collection
     {
-        return $this->model
-            ->newQuery()
-            ->with(['user', 'university', 'department'])
-            ->get($columns);
+        return $this->rememberTagged('students', function() use ($columns) {
+            return $this->model
+                ->newQuery()
+                ->with(['user', 'university', 'department'])
+                ->get($columns);
+        });
     }
 
 
     public function create(array $data): Student
     {
+        $this->flushTagged('students');
+
         $user = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -55,6 +55,8 @@ class StudentRepository extends BaseRepository
         ]);
     }
     public function delete(int $id): void {
+        $this->flushTagged('students');
+
         $profile = $this->find($id);
         $user = $profile->user;
         parent::delete($id);
@@ -66,6 +68,8 @@ class StudentRepository extends BaseRepository
 
     public function update(int $id, array $data): Student
     {
+        $this->flushTagged('students');
+
         return DB::transaction(function() use ($id, $data) {
             $profile = $this->model->with('user')->find($id);
 
