@@ -4,19 +4,26 @@ namespace App\Http\Controllers\Api\Student;
 
 use App\Factories\ApiResponseFactory;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EnrollmentResource;
 use App\Models\CourseOffering;
 use App\Models\Enrollment;
 use App\Processors\EnrollmentProcessor;
-    use Illuminate\Http\JsonResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Throwable;
+
+use Exception;
+use Symfony\Component\HttpFoundation\Response;
+
+
 /**
  * @OA\Tag(
  *   name="Enrollments",
  *   description="Endpoints for student enrollments"
  * )
  */
+
 class EnrollmentController extends Controller
 {
     public function __construct(protected EnrollmentProcessor $processor) {}
@@ -117,6 +124,19 @@ class EnrollmentController extends Controller
             return ApiResponseFactory::success(['message' => 'Enrollment cancelled.']);
         }catch (ValidationException $e){
             return ApiResponseFactory::error($e->getMessage(), 422);
+        }
+    }
+
+    /**
+     * GET /api/professor/enrolledStudents/{courseOfferingId}
+     *
+     */
+    public function getStudentsEnrolledInCourse(int $courseOfferingId): JsonResponse {
+        try {
+            $data = $this->processor->getEnrollmentsPerCourseOfferings($courseOfferingId);
+            return ApiResponseFactory::success(['data' => EnrollmentResource::collection($data)], Response::HTTP_OK);
+        }catch (Exception $e) {
+            return  ApiResponseFactory::error($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

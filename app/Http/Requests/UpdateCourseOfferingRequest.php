@@ -16,7 +16,7 @@ class UpdateCourseOfferingRequest extends  FormRequest
             'semester_id' => 'sometimes|required|exists:semesters,id',
             'section' => 'nullable|string|max:5',
             'schedule' => 'nullable|string|max:255',
-            'capacity' => 'nullable|integer|min:1'
+            'capacity' => 'required|integer|min:1'
         ];
     }
 }

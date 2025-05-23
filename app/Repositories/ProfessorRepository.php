@@ -128,4 +128,14 @@ class ProfessorRepository extends BaseRepository
             ->where('department_id', $departmentId)
             ->get();
     }
+    /**
+     * Fetch professor (from users->professors).
+     */
+    public function getProfessorWithUser(int $userId): ?Professor
+    {
+        return $this->model
+            ->with('user')
+            ->where('user_id', $userId)
+            ->first();
+    }
 }

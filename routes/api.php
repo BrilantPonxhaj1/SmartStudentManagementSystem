@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\Admin\StudentController;
 use App\Http\Controllers\Api\Admin\ProfessorController;
 use App\Http\Controllers\Api\Professor\AssignmentController;
 use App\Http\Controllers\Api\SemesterController as GeneralSemesterController;
+use App\Http\Controllers\Api\Professor\GradeController;
+use App\Http\Controllers\Api\Professor\ProfessorController as ProfController;
 use App\Http\Controllers\Api\Admin\AdminComplaintController;
 use App\Http\Controllers\Api\Professor\ProfessorComplaintController;
 use App\Http\Controllers\Api\Student\StudentComplaintController;
@@ -113,6 +115,7 @@ Route::group([
     'prefix' => 'professor',
     'middleware' => ['auth:api','role:professor'],
 ], function () {
+    Route::get('/users/{userid}', [ProfController::class, 'getProfessorFromUser']);
    Route::get('/course-offerings/{id}', [CourseOfferingController::class, 'coursesOfProfessor']);
 
    Route::get('/assignments', [AssignmentController::class, 'index']);
@@ -120,6 +123,15 @@ Route::group([
    Route::post('/assignments', [AssignmentController::class, 'store']);
    Route::put('/assignments/{id}', [AssignmentController::class, 'update']);
    Route::delete('/assignments/{id}', [AssignmentController::class, 'destroy']);
+
+
+    Route::get('/grades', [GradeController::class, 'index']);
+    Route::get('/grades/{id}', [GradeController::class, 'show']);
+    Route::post('/grades', [GradeController::class, 'store']);
+    Route::delete('/grades/{id}', [GradeController::class, 'destroy']);
+
+
+    Route::get('/enrolledStudents/{professorId}', [EnrollmentController::class, 'getStudentsEnrolledInCourse']);
 
     Route::get('/exams', [ExamController::class, 'index']);
     Route::get('/exams/{id}', [ExamController::class, 'show']);
@@ -130,6 +142,7 @@ Route::group([
     // Complaint routes (Professor)
     Route::post('/complaints/storeProfessorComplaint', [ProfessorComplaintController::class, 'storeProfessorComplaint']);
     Route::get('/complaints/getProfessorComplaints/{id}', [ProfessorComplaintController::class, 'getProfessorComplaintsByUserId']);
+
 
 
 });

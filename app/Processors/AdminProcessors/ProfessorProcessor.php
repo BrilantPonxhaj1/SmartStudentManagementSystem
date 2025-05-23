@@ -7,6 +7,7 @@ use App\Models\Professor;
 use App\Processors\BaseProcessor;
 use App\Repositories\ProfessorRepository;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use App\Models\User;
@@ -74,5 +75,17 @@ class ProfessorProcessor extends BaseProcessor
     public function professorsByDepartment(int $departmentId): Collection
     {
         return $this->repo->getByDepartment($departmentId);
+    }
+
+    /**
+     * Return the professor with its corresponding $usersid.
+     */
+    public function getProfessorFromUser(int $id): Professor
+    {
+        $prof= $this->repo->getProfessorWithUser($id);
+        if (! $prof) {
+            throw new ModelNotFoundException("No professor for user {$id}");
+        }
+        return $prof;
     }
 }

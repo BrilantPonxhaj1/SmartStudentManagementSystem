@@ -7,6 +7,7 @@ use App\Repositories\EnrollmentRepository;
 use App\Models\Student;
 use App\Models\CourseOffering;
 use App\Models\Enrollment;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\ValidationException;
 // Me kqyr a me lon a me hek  qet proc nese met veq 1 metod
 class EnrollmentProcessor
@@ -25,5 +26,9 @@ class EnrollmentProcessor
     public function cancel(Enrollment $enrollment): void
     {
       $this->repo->cancelEnrollment($enrollment);
+    }
+
+    public function getEnrollmentsPerCourseOfferings(int $courseOfferingId): Collection {
+        return $this->repo->getEnrollmentsPerCourseOfferings($courseOfferingId);
     }
 }
