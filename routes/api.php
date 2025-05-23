@@ -5,11 +5,14 @@ use App\Http\Controllers\Api\Admin\UniversityController;
 use App\Http\Controllers\Api\Admin\SubjectController;
 use App\Http\Controllers\Api\Admin\SemesterController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Professor\ProfessorAppointmentController;
 use App\Http\Controllers\Api\Professor\ExamController;
 use App\Http\Controllers\Api\Student\CourseOfferingController;
 use App\Http\Controllers\Api\Student\EnrollmentController;
+use App\Http\Controllers\Api\Student\StudentAppointmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\StudentController;
+use App\Http\Controllers\Api\Student\StudentController as SecondStudentController;
 use App\Http\Controllers\Api\Admin\ProfessorController;
 use App\Http\Controllers\Api\Professor\AssignmentController;
 use App\Http\Controllers\Api\SemesterController as GeneralSemesterController;
@@ -52,6 +55,7 @@ Route::group([
     Route::post('/subjects', [SubjectController::class, 'store']);
     Route::put('/subjects/{id}', [SubjectController::class, 'update']);
     Route::delete('/subjects/{id}', [SubjectController::class, 'destroy']);
+
 
     Route::get('/semesters/university/{id}', [SemesterController::class, 'getByUniversity']);
     Route::post('/semester', [SemesterController::class, 'store']);
@@ -106,9 +110,18 @@ Route::group([
         Route::post('course_offerings/{courseOffering}/register', [EnrollmentController::class, 'register']);
         Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy']);
 
+
+        Route::get('/appointments', [StudentAppointmentController::class, 'getStudentAppointments']);
+        Route::post('/appointments', [StudentAppointmentController::class, 'store']);
+        Route::delete('/appointments/{id}', [StudentAppointmentController::class, 'destroy']);
+
+        Route::get('/getStudentByUser', [SecondStudentController::class, 'getStudentByUser']);
+        Route::get('/professors', [SecondStudentController::class, 'getProfessorsByStudentDept']);
+
         // Complaint routes (Student)
         Route::post('/complaints/storeStudentComplaint', [StudentComplaintController::class, 'storeStudentComplaint']);
         Route::get('/complaints/getStudentComplaints/{id}', [StudentComplaintController::class, 'getStudentComplaintsByUserId']);
+
     });
 
 Route::group([
@@ -124,6 +137,11 @@ Route::group([
    Route::put('/assignments/{id}', [AssignmentController::class, 'update']);
    Route::delete('/assignments/{id}', [AssignmentController::class, 'destroy']);
 
+
+    Route::get('/appointments', [ProfessorAppointmentController::class, 'getProfessorAppointments']);
+    Route::get('/appointments/{id}', [ProfessorAppointmentController::class, 'show']);
+    Route::put('/appointments/{id}', [ProfessorAppointmentController::class, 'update']);
+    Route::delete('/appointments/{id}', [StudentAppointmentController::class, 'destroy']);
 
     Route::get('/grades', [GradeController::class, 'index']);
     Route::get('/grades/{id}', [GradeController::class, 'show']);
@@ -142,7 +160,6 @@ Route::group([
     // Complaint routes (Professor)
     Route::post('/complaints/storeProfessorComplaint', [ProfessorComplaintController::class, 'storeProfessorComplaint']);
     Route::get('/complaints/getProfessorComplaints/{id}', [ProfessorComplaintController::class, 'getProfessorComplaintsByUserId']);
-
 
 
 });
