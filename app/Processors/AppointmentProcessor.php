@@ -20,9 +20,9 @@ class AppointmentProcessor extends BaseProcessor
         return $this->repo->getAppointmentsByProfessor($professorId);
     }
 
-    public function studentCurrentAppointments(int $studentId): \Illuminate\Support\Collection
+    public function getStudentAppointments(int $studentId): \Illuminate\Support\Collection
     {
-        return $this->repo->getStudentCurrentAppointments($studentId);
+        return $this->repo->getStudentAppointments($studentId);
     }
 
     public function get(int $id): ?Model

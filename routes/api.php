@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Student\EnrollmentController;
 use App\Http\Controllers\Api\Student\StudentAppointmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\StudentController;
+use App\Http\Controllers\Api\Student\StudentController as SecondStudentController;
 use App\Http\Controllers\Api\Admin\ProfessorController;
 use App\Http\Controllers\Api\Professor\AssignmentController;
 use App\Http\Controllers\Api\SemesterController as GeneralSemesterController;
@@ -51,6 +52,7 @@ Route::group([
     Route::post('/subjects', [SubjectController::class, 'store']);
     Route::put('/subjects/{id}', [SubjectController::class, 'update']);
     Route::delete('/subjects/{id}', [SubjectController::class, 'destroy']);
+
 
     Route::get('/semesters/university/{id}', [SemesterController::class, 'getByUniversity']);
     Route::post('/semester', [SemesterController::class, 'store']);
@@ -98,9 +100,12 @@ Route::prefix('student')
         Route::post('course_offerings/{courseOffering}/register', [EnrollmentController::class, 'register']);
         Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy']);
 
-        Route::get('/appointments', [StudentAppointmentController::class, 'getStudentCurrentAppointments']);
+        Route::get('/appointments', [StudentAppointmentController::class, 'getStudentAppointments']);
         Route::post('/appointments', [StudentAppointmentController::class, 'store']);
         Route::delete('/appointments/{id}', [StudentAppointmentController::class, 'destroy']);
+
+        Route::get('/getStudentByUser', [SecondStudentController::class, 'getStudentByUser']);
+        Route::get('/professors', [SecondStudentController::class, 'getProfessorsByStudentDept']);
     });
 
 Route::group([

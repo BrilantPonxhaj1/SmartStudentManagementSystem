@@ -62,4 +62,14 @@ class StudentProcessor extends BaseProcessor
     {
         return $this->repo->getByStatus($status);
     }
+
+    public function getStudentByUserId(int $userId)
+    {
+        return $this->repo->getStudentByUserId($userId);
+    }
+
+    public function getProfessorsForAuthenticatedStudent(int $userId)
+    {
+        return $this->repo->getProfessorsOfStudentDepartment($userId);
+    }
 }

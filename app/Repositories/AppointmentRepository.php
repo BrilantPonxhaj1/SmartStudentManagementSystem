@@ -27,12 +27,11 @@ class AppointmentRepository extends BaseRepository
             ->get();
     }
 
-    public function getStudentCurrentAppointments(int $studentId): \Illuminate\Support\Collection
+    public function getStudentAppointments(int $studentId): \Illuminate\Support\Collection
     {
         return $this->model
-            ->with(['university', 'department', 'studentProfile', 'professorProfile', 'requestedBy'])
+            ->with(['university', 'department', 'studentProfile', 'professorProfile.user', 'requestedBy'])
             ->where('student_profile_id', $studentId)
-            ->where('appointment_time', '>', now())
             ->get();
     }
 
@@ -54,7 +53,9 @@ class AppointmentRepository extends BaseRepository
     {
         $appointment = $this->model->findOrFail($id);
 
-        if (Carbon::parse($appointment->appointment_time)->subHour()->greaterThanOrEqualTo(now())) {
+        $minutesUntil = Carbon::now()->diffInMinutes(Carbon::parse($appointment->appointment_time), false);
+
+        if ($minutesUntil >= 60) {
             $appointment->delete();
         } else {
             throw new \Exception('Appointments can only be cancelled at least 1 hour in advance.');

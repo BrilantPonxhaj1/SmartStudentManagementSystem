@@ -99,4 +99,28 @@ class StudentRepository extends BaseRepository
             return $profile;
         });
     }
+
+    public function getStudentByUserId(int $userId): ?Student
+    {
+        return $this->model
+            ->where('user_id', $userId)
+            ->with(['user', 'university', 'department'])
+            ->first();
+    }
+
+
+    public function getProfessorsOfStudentDepartment(int $userId)
+    {
+        $student = $this->model->with('department')->where('user_id', $userId)->first();
+
+        if (!$student || !$student->department_id) {
+            return collect();
+        }
+
+        return Professor::with('user')
+            ->where('department_id', $student->department_id)
+            ->get();
+    }
+
+
 }

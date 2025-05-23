@@ -20,6 +20,18 @@ class AppointmentResource extends JsonResource
             'status'               => $this->status,
             'requested_by'         => $this->requested_by,
             'notes'                => $this->notes,
+
+            'professor_profile' => $this->whenLoaded('professorProfile', function () {
+                return [
+                    'id' => $this->professorProfile->id,
+                    'user' => $this->professorProfile->user
+                        ? [
+                            'first_name' => $this->professorProfile->user->first_name,
+                            'last_name' => $this->professorProfile->user->last_name
+                        ]
+                        : null
+                ];
+            }),
         ];
     }
 }

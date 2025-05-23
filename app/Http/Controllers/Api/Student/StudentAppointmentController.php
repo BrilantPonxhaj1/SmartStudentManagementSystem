@@ -22,7 +22,7 @@ class StudentAppointmentController extends Controller
         $this->processor = $processor;
     }
 
-    public function getStudentCurrentAppointments(): JsonResponse
+    public function getStudentAppointments(): JsonResponse
     {
         try {
             $user = auth()->user();
@@ -33,7 +33,7 @@ class StudentAppointmentController extends Controller
 
             $studentId = $user->studentProfile->id;
 
-            $appointments = $this->processor->studentCurrentAppointments($studentId);
+            $appointments = $this->processor->getStudentAppointments($studentId);
 
             return ApiResponseFactory::success([
                 'data' => AppointmentResource::collection($appointments)
@@ -67,7 +67,7 @@ class StudentAppointmentController extends Controller
         } catch (ModelNotFoundException $e) {
             return ApiResponseFactory::error('Appointment not found', Response::HTTP_NOT_FOUND);
         } catch (Throwable $e) {
-            return ApiResponseFactory::error('Error deleting appointment', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ApiResponseFactory::error($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
